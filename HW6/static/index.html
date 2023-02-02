@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Events Search</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+    <div class="CONTAINER">
+    <div class="search-panel">
+        <div class="search-panel-title">Events Search</div>
+        <form class="main-form">
+            <label class="form-label" for="keyword">Keyword<span style="color: red">*</span></label><br>
+            <input class="form-input input-keyword" type="text" id="keyword" name="keyword" required>
+            <div class="form-mid-container">
+                <div class="left-input">
+                    <label class="form-label" for="distance">Distance(miles)</label><br>
+                    <input class="form-input" type="number" id="distance" name="distance" placeholder="10" min="0">
+                </div>
+                <div class="right-input">
+                    <label class="form-label" for="Category">Category<span style="color: red">*</span></label><br>
+                    <select class="form-input" id="category" name="category" required>
+                        <option value="default">Default</option>
+                        <option value="music">Music</option>
+                        <option value="sports">Sports</option>
+                        <option value="art">Arts & Theatre </option>
+                        <option value="film">Film</option>
+                        <option value="miscellaneous">Miscellaneous</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-location">
+                <label class="form-label" for="location-text">Location<span style="color: red">*</span></label>
+                <input type="checkbox" id="location-check" name="location-check">
+                <label for="location-check" style="color: white">Auto-Detect Location</label><br>
+                <input class="form-input" type="text" id="location-text" name="location-text" required>
+            </div>
+            <div class="form-submit">
+                <input class="form-submit-button" type="submit" id="submit-button" value="SEARCH" style="background-color:#FD6C00">
+                <input class="form-submit-button" type="reset" id="clear-button" value="CLEAR" style="background-color:#4E6FA9">
+            </div>
+        </form>
+    </div>
+    </div>
+
+
+
+
+</body>
+</html>
