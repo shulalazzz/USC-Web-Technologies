@@ -33,7 +33,7 @@ div.CONTAINER {
     font-weight: lighter;
     font-family: FangSong, serif;
     padding-bottom: 10px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.9);
 }
 
 .form-label {
@@ -65,17 +65,18 @@ div.CONTAINER {
 
 option {
     color: white;
+    background-color: aqua;
 }
 
 #distance {
     width: 60%;
 }
 
-.form-submit {
+.form-button {
     margin-top: 20px;
 }
 
-.form-submit-button {
+.form-button {
     border: none;
     color: white;
     padding: 10px 20px;
