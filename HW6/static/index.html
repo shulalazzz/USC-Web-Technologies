@@ -9,44 +9,64 @@
 </head>
 <body>
     <div class="CONTAINER">
-    <div class="search-panel">
-        <div class="search-panel-title">Events Search</div>
-        <form class="main-form">
-            <label class="form-label" for="keyword">Keyword<span style="color: red">*</span></label><br>
-            <input class="form-input input-keyword" type="text" id="keyword" name="keyword" required>
-            <div class="form-mid-container">
-                <div class="left-input">
-                    <label class="form-label" for="distance">Distance(miles)</label><br>
-                    <input class="form-input" type="number" id="distance" name="distance" placeholder="10" min="0">
+        <div class="search-panel">
+            <div class="search-panel-title">Events Search</div>
+            <form class="main-form" id="main-form">
+                <label class="form-label" for="keyword">Keyword<span style="color: red">*</span></label><br>
+                <input class="form-input input-keyword" type="text" id="keyword" name="keyword" required>
+                <div class="form-mid-container">
+                    <div class="left-input">
+                        <label class="form-label" for="distance">Distance(miles)</label><br>
+                        <input class="form-input" type="number" id="distance" name="distance" placeholder="10" min="0">
+                    </div>
+                    <div class="right-input">
+                        <label class="form-label" for="Category">Category<span style="color: red">*</span></label><br>
+                        <select class="form-input" id="category" name="category" required>
+                            <option value="Default">Default</option>
+                            <option value="Music">Music</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Arts">Arts & Theatre </option>
+                            <option value="Film">Film</option>
+                            <option value="Miscellaneous">Miscellaneous</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="right-input">
-                    <label class="form-label" for="Category">Category<span style="color: red">*</span></label><br>
-                    <select class="form-input" id="category" name="category" required>
-                        <option value="default">Default</option>
-                        <option value="music">Music</option>
-                        <option value="sports">Sports</option>
-                        <option value="art">Arts & Theatre </option>
-                        <option value="film">Film</option>
-                        <option value="miscellaneous">Miscellaneous</option>
-                    </select>
+                <div class="form-location">
+                    <label class="form-label" for="location-text">Location<span style="color: red">*</span></label>
+                    <input type="checkbox" id="location-check" name="location-check" onclick="checkAutoDetection()">
+                    <label for="location-check" style="color: white">Auto-Detect Location</label><br>
+                    <input class="form-input" type="text" id="location-text" name="location-text" required>
                 </div>
-            </div>
-            <div class="form-location">
-                <label class="form-label" for="location-text">Location<span style="color: red">*</span></label>
-                <input type="checkbox" id="location-check" name="location-check">
-                <label for="location-check" style="color: white">Auto-Detect Location</label><br>
-                <input class="form-input" type="text" id="location-text" name="location-text" required>
-            </div>
-            <div>
-                <button class="form-button" id="search-button" style="background-color:#FD6C00">SEARCH</button>
-                <input class="form-button" type="reset" value="CLEAR" id="clear-button" style="background-color:#4E6FA9">
-            </div>
-        </form>
+                <div>
+                    <button class="form-button" type="submit" id="search-button" onclick="search()">SEARCH</button>
+                    <button class="form-button" id="clear-button" onclick="clearForm()" formnovalidate>CLEAR</button>
+                </div>
+            </form>
+        </div>
+        <div class="result-panel">
+            <table class="result-table" id="result-table" style="width:100%">
+                <thead>
+                <tr>
+                    <th style="width:15%">Date</th>
+                    <th style="width:15%">Icon</th>
+                    <th style="width:40%">Event</th>
+                    <th style="width:10%">Genre</th>
+                    <th style="width:20%">Venue</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td>2021-10-10</td>
+                    <td></td>
+                    <td>Event 1</td>
+                    <td>Music</td>
+                    <td>Venue 1</td>
+                </tr>
+
+            </table>
+
+        </div>
+
     </div>
-    </div>
-
-
-
 
 </body>
 </html>
