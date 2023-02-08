@@ -111,12 +111,13 @@ option {
 }
 
 .result-panel {
+    display: none;
     background-color: white;
-    width: 1000px;
+    width: 1200px;
     margin: 0 auto;
 }
 
-thead {
+.table-header {
     box-shadow: 0 2px 8px #777777;
 }
 
@@ -133,4 +134,17 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
     text-align: center;
+}
+
+a.event-link {
+    text-decoration: none;
+}
+
+a.event-link:visited {
+    color: inherit;
+}
+
+a.event-link:hover {
+    color: #5530c2;
+    cursor: pointer;
 }
