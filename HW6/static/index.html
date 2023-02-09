@@ -20,7 +20,7 @@
                         <input class="form-input" type="number" id="distance" name="distance" placeholder="10" min="0">
                     </div>
                     <div class="right-input">
-                        <label class="form-label" for="Category">Category<span style="color: red">*</span></label><br>
+                        <label class="form-label" for="category">Category<span style="color: red">*</span></label><br>
                         <select class="form-input" id="category" name="category" required>
                             <option value="Default">Default</option>
                             <option value="Music">Music</option>
@@ -48,15 +48,60 @@
                 <tr class="table-header">
                     <th style="width:15%">Date</th>
                     <th style="width:15%">Icon</th>
-                    <th style="width:40%">Event</th>
-                    <th style="width:10%">Genre</th>
-                    <th style="width:20%">Venue</th>
+                    <th style="width:40%" id="eventName" onclick="sortTable(this.id)">Event</th>
+                    <th style="width:10%" id="genre" onclick="sortTable(this.id)">Genre</th>
+                    <th style="width:20%" id="venue" onclick="sortTable(this.id)">Venue</th>
                 </tr>
 
             </table>
         </div>
         <div class="event-card" id="event-card">
+            <div class="event-card-title" id="event-card-title"></div>
+            <div class="event-card-container">
+                <div class="event-card-content" id="event-card-content">
+                    <div id="event-card-date">
+                        <h3>Date</h3>
+                        <p></p>
+                    </div>
+                    <div id="event-card-art">
+                        <h3>Artist/Team</h3>
+                        <p></p>
+                    </div>
+                    <div id="event-card-venue">
+                        <h3>Venue</h3>
+                        <p></p>
+                    </div>
+                    <div id="event-card-genre">
+                        <h3>Genres</h3>
+                        <p></p>
+                    </div>
+                    <div id="event-card-price">
+                        <h3>Price Ranges</h3>
+                        <p></p>
+                    </div>
+                    <div id="event-card-ticket-status">
+                        <h3>Ticket Status</h3>
+                        <span></span>
+                    </div>
+                    <div  id="event-card-buy-ticket">
+                        <h3>Buy Ticket At:</h3>
+                    <p></p>
+                    </div>
+                </div>
+                <div class="event-card-map" id="event-card-map">
 
+                </div>
+            </div>
+        </div>
+        <div id="venue-details-arrow-part" class="venue-details-arrow-part">
+            <h3 id="venue-details-arrow-text">Show Venue Details</h3>
+            <div class="venue-details-arrow" onclick="showVenueCard()"></div>
+        </div>
+        <div class="venue-card" id="venue-card">
+            <div class="venue-card-container">
+                <span class="venue-card-title">I'm batman</span>
+                <div class="venue-card-body"></div>
+            </div>
         </div>
 
     </div>

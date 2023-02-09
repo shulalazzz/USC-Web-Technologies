@@ -25,10 +25,10 @@ def index():
 @app.route('/search/<data>', methods=['GET'])
 def search(data):
     jsonData = json.loads(data)
-    print(jsonData)
+    # print(jsonData)
     apikey = 'pviXh7vSvsPRcVqdsl6D1b1deOhtRKcb'
     lat, lng = jsonData['location'].split(',')
-    geoPoint = geohash.encode(float(lat), float(lng), precision=5)
+    geoPoint = geohash.encode(float(lat), float(lng), precision=7)
     radius = (jsonData['distance'])
     segmentId = categoryMap[jsonData['category']]
     unit = 'miles'
@@ -39,10 +39,24 @@ def search(data):
     if response.status_code == 200:
         if '_embedded' in response.json() and 'events' in response.json()['_embedded']:
             events = response.json()['_embedded']['events'][:20]
-            json_string = json.dumps(events)
-            print(json_string)
+            # json_string = json.dumps(events)
+            # print(json_string)
             return jsonify(events)
-    return jsonify([])
+    return jsonify(None)
+
+
+@app.route('/event/<event_id>', methods=['GET'])
+def get_event_detail(event_id):
+    apikey = 'pviXh7vSvsPRcVqdsl6D1b1deOhtRKcb'
+    response = requests.get('https://app.ticketmaster.com/discovery/v2/events/' + event_id,
+                            params={'apikey': apikey})
+    if response.status_code == 200:
+        if 'name' in response.json():
+            event_detail = response.json()
+            json_string = json.dumps(event_detail)
+            print(json_string)
+            return jsonify(event_detail)
+    return jsonify(None)
 
 
 if __name__ == '__main__':
