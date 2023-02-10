@@ -99,10 +99,27 @@
         </div>
         <div class="venue-card" id="venue-card">
             <div class="venue-card-container">
-                <span class="venue-card-title">I'm batman</span>
-                <div class="venue-card-body"></div>
+                <span class="venue-card-title" id="venue-card-title">I'm batman</span>
+                <div class="venue-card-image" id="venue-card-image"></div>
+                <div class="venue-card-body">
+                    <div class="venue-card-body-left" style="width: 50%; border-right: 1px solid black;">
+                        <div class="venue-card-body-left-body">
+                            <div style="font-weight: bold; margin-right:4px">Address: </div>
+                            <div id="venue-card-address">
+                                <p>111 south grand avenue</p>
+                                <p>Los Angeles, CA</p>
+                                <p>90012</p>
+                            </div>
+                        </div>
+                        <a id="venue-card-google-map" target="_blank" style="margin-top: 10px">Open in Google Maps</a>
+                    </div>
+                    <div class="venue-card-body-right" style="width: 50%">
+                        <a id="venue-card-more-events" target="_blank">More events at this venue</a>
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="not-found" id="not-found">No Records found</div>
 
     </div>
 

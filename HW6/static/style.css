@@ -231,7 +231,7 @@ img.seat-map {
 }
 
 .venue-details-arrow-part {
-    margin: 0;
+    margin-bottom: 40px;
     text-align: center;
     display: none;
 }
@@ -258,10 +258,11 @@ img.seat-map {
 }
 
 .venue-card {
+    display: none;
     background-color: white;
     border-radius: 20px;
-    width : 1000px;
-    height: 200px;
+    width : 1080px;
+    margin-bottom: 30px;
 }
 
 .venue-card-container {
@@ -282,7 +283,43 @@ img.seat-map {
 .venue-card-body {
     display: flex;
     justify-content: center;
-    align-items: center;
+    /*align-items: center;*/
     flex-direction: row;
     margin: 30px auto 25px;
+    font-size: 20px;
+}
+
+.venue-card-body-left-body {
+    display: flex;
+    justify-content: center;
+    /*align-items: center;*/
+    flex-direction: row;
+    text-align: left;
+}
+
+.venue-card a {
+    text-decoration: none;
+    color: #429af0;
+}
+
+.venue-card a:hover {
+    color: #6743cd;
+    cursor: pointer;
+}
+
+.venue-card img {
+    object-fit: contain;
+    max-width: 120px;
+}
+
+.not-found {
+    display: none;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    width: 1200px;
+    color: red;
+    margin: 0 auto;
+    background-color: white;
+    padding: 10px;
 }

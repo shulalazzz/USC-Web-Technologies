@@ -83,7 +83,11 @@ function sendToPythonSearch(keyword, location, distance, category) {
 
 function preprocessResponse(response) {
     let data = JSON.parse(response)
-    if (data === null) return
+    if (data === null) {
+        let notFound = document.getElementById('not-found')
+        notFound.style.display = 'block'
+        return
+    }
     let processedData = []
     for (let i = 0; i < data.length; i++) {
         let event = {}
@@ -124,6 +128,7 @@ function showResult() {
 }
 
 function resetResult() {
+    sessionStorage.clear()
     let table = document.getElementById('result-table')
     let rowCount = table.rows.length
     for (let i = 1; i < rowCount; i++) {
@@ -135,6 +140,10 @@ function resetResult() {
     eventCard.style.display = 'none'
     let venueDetailsArrowPart = document.getElementById('venue-details-arrow-part')
     venueDetailsArrowPart.style.display = 'none'
+    let venueCard = document.getElementById('venue-card')
+    venueCard.style.display = 'none'
+    let notFound = document.getElementById('not-found')
+    notFound.style.display = 'none'
 }
 
 function sortTable(attribute) {
@@ -165,6 +174,8 @@ function sendToPythonEventDetails(id) {
     xhr.send()
 }
 function showEventCard(response) {
+    let venueCard = document.getElementById('venue-card')
+    venueCard.style.display = 'none'
     let data = JSON.parse(response)
     if (data === null) return
     let eventCard = document.getElementById('event-card')
@@ -302,4 +313,47 @@ function showVenueCard() {
     venueDetailArrowPart.style.display = 'none'
     let venueData = JSON.parse(sessionStorage.getItem('venueDetails'))
     console.log(venueData)
+    document.getElementById('venue-card').style.display = 'block'
+    document.getElementById('venue-card-title').innerHTML = venueData['name']
+    let venueCardAddress = document.getElementById('venue-card-address')
+    let addressHtmlText = ''
+    let addressTexts = [venueData['name']]
+    if (venueData.hasOwnProperty('address') && venueData['address'].hasOwnProperty('line1')) {
+
+        addressHtmlText += `<p>${venueData['address']['line1']}</p>`
+        addressTexts.push(venueData['address']['line1'])
+    }
+    if (venueData.hasOwnProperty('city') && venueData['city'].hasOwnProperty('name')) {
+        addressHtmlText += `<p>${venueData['city']['name']}, `
+        addressTexts.push(venueData['city']['name'])
+    }
+    if (venueData.hasOwnProperty('state') && venueData['state'].hasOwnProperty('stateCode')) {
+        addressHtmlText += `${venueData['state']['stateCode']} </p>`
+        addressTexts.push(venueData['state']['stateCode'])
+    }
+    if (venueData.hasOwnProperty('postalCode')) {
+        addressHtmlText += `<p>${venueData['postalCode']}</p>`
+        addressTexts.push(venueData['postalCode'])
+    }
+    venueCardAddress.innerHTML = addressHtmlText
+    let venueCardGoogleMap = document.getElementById('venue-card-google-map')
+    let link = 'https://www.google.com/maps/search/?api=1&query=' + addressTexts.join(',+')
+    venueCardGoogleMap.setAttribute('href', link)
+
+    if (venueData.hasOwnProperty('images') && venueData['images'].length > 0) {
+        document.getElementById('venue-card-image').innerHTML = `<img src="${venueData['images'][0]['url']}" alt="venue image">`
+    }
+    else {
+        document.getElementById('venue-card-image').innerHTML = ''
+    }
+    if (venueData.hasOwnProperty('url')) {
+        document.getElementById('venue-card-more-events').setAttribute('href', venueData['url'])
+    }
+    else {
+        document.getElementById('venue-card-more-events').removeAttribute('href')
+    }
+
+
+    let venueCard = document.getElementById('venue-card')
+    venueCard.scrollIntoView({behavior: "smooth"})
 }
