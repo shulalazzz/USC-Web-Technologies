@@ -17,6 +17,7 @@ div.CONTAINER {
     align-items: center;
     flex-direction: column;
     margin: 0 auto;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .search-panel {
@@ -310,6 +311,7 @@ img.seat-map {
 .venue-card img {
     object-fit: contain;
     max-width: 120px;
+    margin-top: 20px;
 }
 
 .not-found {

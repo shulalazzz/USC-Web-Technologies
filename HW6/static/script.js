@@ -14,6 +14,7 @@ function clearForm() {
     document.getElementById('location-check').checked = false
     document.getElementById('location-text').style.display = 'block'
     document.getElementById('location-text').required = true
+    sessionStorage.clear()
 }
 
 function checkAutoDetection() {
@@ -34,6 +35,7 @@ function search() {
     if (keyword === '') {
         return false
     }
+    keyword = keyword.split(' ').join('+')
     let checkBox = document.getElementById('location-check')
     let location = null
     let distance = 10
@@ -83,6 +85,7 @@ function sendToPythonSearch(keyword, location, distance, category) {
 
 function preprocessResponse(response) {
     let data = JSON.parse(response)
+    // console.log(data)
     if (data === null) {
         let notFound = document.getElementById('not-found')
         notFound.style.display = 'block'
@@ -91,12 +94,30 @@ function preprocessResponse(response) {
     let processedData = []
     for (let i = 0; i < data.length; i++) {
         let event = {}
-        event['id'] = data[i]['id']
-        event['eventName'] = data[i]['name']
-        event['dates'] = data[i]['dates']['start']['localDate'] + (data[i]['dates']['start'].hasOwnProperty('localTime') ? '<br>' + data[i]['dates']['start']['localTime'] : '')
-        event['images'] = data[i]['images'][0]['url']
-        event['genre'] = data[i]['classifications'][0]['genre']['name']
-        event['venue'] = data[i]['_embedded']['venues'][0]['name']
+        if (data[i].hasOwnProperty('id')) {
+            event['id'] = data[i]['id']
+        }
+        else continue
+        if (data[i].hasOwnProperty('name')) {
+            event['eventName'] = data[i]['name']
+        }
+        else continue
+        if (data[i].hasOwnProperty('dates')) {
+            event['dates'] = data[i]['dates']['start']['localDate'] + (data[i]['dates']['start'].hasOwnProperty('localTime') ? '<br>' + data[i]['dates']['start']['localTime'] : '')
+        }
+        else continue
+        if (data[i].hasOwnProperty('images')) {
+            event['images'] = data[i]['images'][0]['url']
+        }
+        else continue
+        if (data[i].hasOwnProperty('classifications') && data[i]['classifications'].length > 0 && data[i]['classifications'][0].hasOwnProperty('genre')) {
+            event['genre'] = data[i]['classifications'][0]['genre']['name']
+        }
+        else continue
+        if (data[i].hasOwnProperty('_embedded') && data[i]['_embedded'].hasOwnProperty('venues') && data[i]['_embedded']['venues'].length > 0) {
+            event['venue'] = data[i]['_embedded']['venues'][0]['name']
+        }
+        else continue
         processedData.push(event)
     }
     sessionStorage.setItem('data', JSON.stringify(processedData))
@@ -109,6 +130,10 @@ function preprocessResponse(response) {
 
 function showResult() {
     let data = JSON.parse(sessionStorage.getItem('data'))
+    if (data === null) {
+        console.log('No data in showResult')
+        return
+    }
     let resultPanel = document.getElementById('result-panel')
     resultPanel.style.display = 'block'
     let table = document.getElementById('result-table')
@@ -128,7 +153,6 @@ function showResult() {
 }
 
 function resetResult() {
-    sessionStorage.clear()
     let table = document.getElementById('result-table')
     let rowCount = table.rows.length
     for (let i = 1; i < rowCount; i++) {
@@ -148,6 +172,10 @@ function resetResult() {
 
 function sortTable(attribute) {
     let data = JSON.parse(sessionStorage.getItem('data'))
+    if (data === null) {
+        console.log('No data in sortTable')
+        return
+    }
     let order = sessionStorage.getItem(attribute)
     if (order === '0') {
         data.sort((a, b) => a[attribute] > b[attribute] ? 1 : -1)
@@ -177,6 +205,7 @@ function showEventCard(response) {
     let venueCard = document.getElementById('venue-card')
     venueCard.style.display = 'none'
     let data = JSON.parse(response)
+    // console.log(data)
     if (data === null) return
     let eventCard = document.getElementById('event-card')
     eventCard.style.display = 'block'
@@ -209,8 +238,8 @@ function showEventCard(response) {
     if (data.hasOwnProperty('_embedded') && data['_embedded'].hasOwnProperty('venues')) {
         venueDiv.style.display = 'block'
         venueDiv.lastElementChild.innerHTML = data['_embedded']['venues'][0]['name']
-        // venue name for later use, when user clicks on the venue details arrow
-        sessionStorage.setItem('venueDetails', JSON.stringify(data['_embedded']['venues'][0]))
+        let venueDetailsArrow = document.getElementById('venue-details-arrow')
+        venueDetailsArrow.setAttribute('onclick', `sendToPythonVenueDetails('${data['_embedded']['venues'][0]['name']}')`)
     }
     else {
         venueDiv.style.display = 'none'
@@ -307,12 +336,26 @@ function showTicketStatus(code) {
     statusSpan.innerHTML = status
 }
 
+function sendToPythonVenueDetails(venueName) {
+    let xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+            showVenueCard(xhr.response)
+        }
+    }
+    xhr.open("GET", 'http://127.0.0.1:5000/venue/' + venueName.split(' ').join('+'), true)
+    xhr.send()
+}
 
-function showVenueCard() {
+function showVenueCard(response) {
     let venueDetailArrowPart = document.getElementById('venue-details-arrow-part')
     venueDetailArrowPart.style.display = 'none'
-    let venueData = JSON.parse(sessionStorage.getItem('venueDetails'))
-    console.log(venueData)
+    let venueData = JSON.parse(response)
+    // console.log(venueData)
+    if (venueData === null) {
+        document.getElementById('venue-card').style.display = 'none'
+        return
+    }
     document.getElementById('venue-card').style.display = 'block'
     document.getElementById('venue-card-title').innerHTML = venueData['name']
     let venueCardAddress = document.getElementById('venue-card-address')

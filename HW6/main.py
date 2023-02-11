@@ -25,7 +25,7 @@ def index():
 @app.route('/search/<data>', methods=['GET'])
 def search(data):
     jsonData = json.loads(data)
-    # print(jsonData)
+    print(jsonData)
     apikey = 'pviXh7vSvsPRcVqdsl6D1b1deOhtRKcb'
     lat, lng = jsonData['location'].split(',')
     geoPoint = geohash.encode(float(lat), float(lng), precision=7)
@@ -54,8 +54,23 @@ def get_event_detail(event_id):
         if 'name' in response.json():
             event_detail = response.json()
             json_string = json.dumps(event_detail)
-            print(json_string)
+            # print(json_string)
             return jsonify(event_detail)
+    return jsonify(None)
+
+
+@app.route('/venue/<venue_name>', methods=['GET'])
+def get_venue_detail(venue_name):
+    print(venue_name)
+    apikey = 'pviXh7vSvsPRcVqdsl6D1b1deOhtRKcb'
+    response = requests.get('https://app.ticketmaster.com/discovery/v2/venues',
+                            params={'apikey': apikey, 'keyword': venue_name})
+    if response.status_code == 200:
+        if '_embedded' in response.json() and 'venues' in response.json()['_embedded']:
+            venue_detail = response.json()['_embedded']['venues'][0]
+            json_string = json.dumps(venue_detail)
+            # print(json_string)
+            return jsonify(venue_detail)
     return jsonify(None)
 
 
