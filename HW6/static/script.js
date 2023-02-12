@@ -80,6 +80,7 @@ function sendToPythonSearch(keyword, location, distance, category) {
         }
     }
     xhr.open("GET", 'http://127.0.0.1:5000/search/' + data, true)
+    // xhr.open("GET", 'https://csci-571-hw6-376303.wl.r.appspot.com/search/' + data, true)
     xhr.send()
 }
 
@@ -199,6 +200,7 @@ function sendToPythonEventDetails(id) {
         }
     }
     xhr.open("GET", 'http://127.0.0.1:5000/event/' + id, true)
+    // xhr.open("GET", 'https://csci-571-hw6-376303.wl.r.appspot.com/event/' + id, true)
     xhr.send()
 }
 function showEventCard(response) {
@@ -344,6 +346,7 @@ function sendToPythonVenueDetails(venueName) {
         }
     }
     xhr.open("GET", 'http://127.0.0.1:5000/venue/' + venueName.split(' ').join('+'), true)
+    // xhr.open("GET", 'https://csci-571-hw6-376303.wl.r.appspot.com/venue/' + venueName.split(' ').join('+'), true)
     xhr.send()
 }
 
