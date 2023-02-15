@@ -111,8 +111,8 @@ function preprocessResponse(response) {
             event['images'] = data[i]['images'][0]['url']
         }
         else continue
-        if (data[i].hasOwnProperty('classifications') && data[i]['classifications'].length > 0 && data[i]['classifications'][0].hasOwnProperty('genre')) {
-            event['genre'] = data[i]['classifications'][0]['genre']['name']
+        if (data[i].hasOwnProperty('classifications') && data[i]['classifications'].length > 0 && data[i]['classifications'][0].hasOwnProperty('segment')) {
+            event['genre'] = data[i]['classifications'][0]['segment']['name']
         }
         else continue
         if (data[i].hasOwnProperty('_embedded') && data[i]['_embedded'].hasOwnProperty('venues') && data[i]['_embedded']['venues'].length > 0) {
@@ -173,6 +173,7 @@ function resetResult() {
 
 function sortTable(attribute) {
     let data = JSON.parse(sessionStorage.getItem('data'))
+    // console.log(data)
     if (data === null) {
         console.log('No data in sortTable')
         return
