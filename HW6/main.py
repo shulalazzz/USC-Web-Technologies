@@ -75,4 +75,4 @@ def get_venue_detail(venue_name):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

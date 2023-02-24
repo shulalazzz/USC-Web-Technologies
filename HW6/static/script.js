@@ -52,6 +52,11 @@ function search() {
         fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyAhrUOOniYwPz_aLnuKi2M6v3DfG50oH5o`).
         then(response => response.json()).then(data => {
             // location = data.results[0].geometry.location.lat + ',' + data.results[0].geometry.location.lng
+            if (data['status'] === 'ZERO_RESULTS') {
+                let notFound = document.getElementById('not-found')
+                notFound.style.display = 'block'
+                return
+            }
             location = data['results'][0]['geometry']['location']['lat'] + ',' + data['results'][0]['geometry']['location']['lng']
             sendToPythonSearch(keyword, location, distance, category)
             // console.log(data)
@@ -111,7 +116,8 @@ function preprocessResponse(response) {
             event['images'] = data[i]['images'][0]['url']
         }
         else continue
-        if (data[i].hasOwnProperty('classifications') && data[i]['classifications'].length > 0 && data[i]['classifications'][0].hasOwnProperty('segment')) {
+        if (data[i].hasOwnProperty('classifications') && data[i]['classifications'].length > 0 && data[i]['classifications'][0].hasOwnProperty('segment')
+            && data[i]['classifications'][0]['segment'].hasOwnProperty('name') && data[i]['classifications'][0]['segment']['name'] !== 'Undefined') {
             event['genre'] = data[i]['classifications'][0]['segment']['name']
         }
         else continue
@@ -293,7 +299,7 @@ function showEventCard(response) {
     let buyTicketDiv = document.getElementById('event-card-buy-ticket')
     if (data.hasOwnProperty('url')) {
         buyTicketDiv.style.display = 'block'
-        buyTicketDiv.lastElementChild.innerHTML = `<a href="${data['url']}" target="_blank">Buy Ticket</a>`
+        buyTicketDiv.lastElementChild.innerHTML = `<a href="${data['url']}" target="_blank">Ticketmaster</a>`
     }
     else {
         buyTicketDiv.style.display = 'none'
