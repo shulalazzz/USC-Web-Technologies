@@ -1,0 +1,41 @@
+.search-panel {
+  margin: 2rem auto;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.search-panel-title {
+  font-size: 2rem;
+  color: white;
+  text-align: center;
+  font-family: serif;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+}
+
+.form-label {
+  color: #9FC3D6;
+  margin-top: 1rem;
+}
+
+.btn {
+  margin: 1rem 1rem;
+}
+
+.submit-btn {
+  background-color: #f72020;
+  border-color: #f72020;
+}
+
+.submit-btn:hover {
+  background-color: #c31919;
+  border-color: #c31919;
+}
+
+.submit-btn:active {
+  background-color: #9b1414;
+  border-color: #9b1414;
+}
+

@@ -1,0 +1,19 @@
+.nav-item {
+  color: white;
+  margin: 0 0.5rem;
+}
+
+.active-tab {
+  border: 2px solid white;
+  border-radius: 0.8rem;
+}
+
+.nav-link {
+  color: white;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.header {
+  margin-top: 0.5rem;
+}

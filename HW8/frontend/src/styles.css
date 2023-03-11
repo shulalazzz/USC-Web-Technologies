@@ -1,0 +1,15 @@
+html, body, p, div {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-image: url("images/background.jpg");
+  background-size : cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

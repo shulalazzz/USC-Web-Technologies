@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row">
+    <div class="search-panel col-sm-12 col-md-6">
+      <form [formGroup]="myForm" (ngSubmit)="onSubmit()" ngNativeValidate>
+        <div class="search-panel-title">Events Search</div>
+        <div class="form-group">
+              <div>
+                <label class="form-label" for="keyword">Keyword<span style="color: red">*</span></label>
+                <input type="text"
+                       class="form-control"
+                       id="keyword"
+                       required
+                       formControlName="keyword">
+              </div>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <label class="form-label" for="distance">Distance</label>
+              <input type="number" class="form-control" id="distance" value="10" formControlName="distance">
+            </div>
+            <div class="col-10 col-md-5">
+              <label class="form-label" for="category">Category<span style="color: red">*</span></label>
+              <select class="form-control" id="category" formControlName="category">
+                <option value="default">Default</option>
+                <option value="music">Music</option>
+                <option value="sports">Sports</option>
+                <option value="art">Arts & Theatre</option>
+                <option value="film">Film</option>
+                <option value="miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+          </div>
+            <div>
+              <label class="form-label" for="locationText">Location<span style="color: red">*</span></label>
+              <input type="text" class="form-control" id="locationText" formControlName="locationText" [required]="isRequiredLocationText">
+              <div style="margin-top: 1rem">
+                <input type="checkbox"
+                       id="locationCheckbox"
+                       class="form-check-input"
+                       formControlName="locationCheckbox"
+                       (change)="onChangeLocationCheckbox($event)">
+                <label class="form-check-label" for="locationCheckbox" style="color:#9FC3D6; margin-left: 0.5rem">Auto-detect your Location</label>
+              </div>
+            </div>
+          <div style="display: flex; justify-content: center">
+            <button type="submit" class="btn btn-primary submit-btn">SUBMIT</button>
+            <button class="btn btn-primary" id="clear-button" type="reset">CLEAR</button>
+          </div>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
