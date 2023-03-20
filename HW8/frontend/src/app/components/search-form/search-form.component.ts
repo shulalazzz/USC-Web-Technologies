@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
@@ -13,11 +13,12 @@ export class SearchFormComponent {
   isRequiredLocationText: boolean = true;
   private ipInfoApi: string = "https://ipinfo.io/json?token=fcee7187512c64";
 
+
   constructor(private http: HttpClient) {
     this.myForm = new FormGroup({
       keyword: new FormControl('', Validators.required),
       distance: new FormControl(10),
-      category: new FormControl('default'),
+      category: new FormControl('Default'),
       locationText: new FormControl('', Validators.required),
       locationCheckbox: new FormControl(false)
     });
@@ -46,20 +47,36 @@ export class SearchFormComponent {
           // console.log(response);
           let location :string = response.loc;
           // console.log(location);
+          this.sendToBackendSearch(location);
         }, error => console.log(error));
       }
       else if (this.myForm.controls['locationCheckbox'].value === false) {
         let location :string = this.myForm.controls['locationText'].value.split(' ').join('+');
         this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyAhrUOOniYwPz_aLnuKi2M6v3DfG50oH5o`).subscribe(response => {
           // console.log(response);
+          if (response.status === "ZERO_RESULTS") {
+            alert("Invalid location");
+            return;
+          }
           let location :string = response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng;
           // console.log(location);
+          this.sendToBackendSearch(location);
         }, error => console.log(error));
       }
     }
     else {
       console.log('Form is not valid');
     }
+  }
+
+  sendToBackendSearch(location: string) {
+    this.myForm.value['location'] = location;
+    const params = JSON.stringify(this.myForm.value);
+    const url = 'http://localhost:5000/search/' + params;
+    this.http.get<any>(url).subscribe(response => {
+      console.log("from frontend");
+      console.log(response);
+    }, error => console.log(error));
   }
 
 

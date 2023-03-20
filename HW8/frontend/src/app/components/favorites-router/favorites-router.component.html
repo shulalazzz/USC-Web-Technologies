@@ -1,1 +1,38 @@
-<p>favorites-router works!</p>
+<div class="wrapper">
+  <mat-form-field class="example-full-width">
+    <input matInput [(ngModel)]="selectedMovie" [matAutocomplete]="auto"
+           [formControl]="searchMoviesCtrl" placeholder="Min 3 Characters Ex. Ant">
+<!--    <button *ngIf="selectedMovie" matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection()">-->
+<!--      <mat-icon>close</mat-icon>-->
+<!--    </button>-->
+    <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete" (optionSelected)="onSelected()"
+                      [displayWith]="displayWith">
+      <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+      <ng-container *ngIf="!isLoading">
+        <mat-option *ngFor="let movie of filteredMovies" [value]="movie">
+          <span><b>{{movie.Title}}</b> ({{movie.Year}})</span>
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <br>
+
+<!--  <ng-container *ngIf="errorMsg; else elseTemplate">-->
+<!--    {{errorMsg}}-->
+<!--  </ng-container>-->
+<!--  <ng-template #elseTemplate>-->
+<!--    <div class="movie-details" *ngIf="selectedMovie?.Title">-->
+<!--      <div>-->
+<!--        <img [src]="selectedMovie?.Poster" style="height: 250px;" />-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <h3>Selected Value: {{selectedMovie?.Title}}</h3>-->
+<!--        <ul>-->
+<!--          <li>Year: {{selectedMovie?.Year}}</li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </ng-template>-->
+
+</div>
