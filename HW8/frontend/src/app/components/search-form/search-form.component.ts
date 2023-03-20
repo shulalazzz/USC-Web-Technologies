@@ -1,16 +1,22 @@
-import { Component } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap} from "rxjs/operators";
 
 @Component({
   selector: 'search-form',
   templateUrl: './search-form.component.html',
   styleUrls: ['./search-form.component.css']
 })
-export class SearchFormComponent {
+export class SearchFormComponent implements OnInit{
 
   myForm: FormGroup;
   isRequiredLocationText: boolean = true;
+  autoCompleteKeyword: string = '';
+  autoCompleteCtrl = new FormControl();
+  isLoading = false;
+  suggestions: any;
+
   private ipInfoApi: string = "https://ipinfo.io/json?token=fcee7187512c64";
 
 
@@ -22,6 +28,18 @@ export class SearchFormComponent {
       locationText: new FormControl('', Validators.required),
       locationCheckbox: new FormControl(false)
     });
+  }
+
+  onClear() {
+    this.myForm.reset()
+    this.myForm.controls['distance'].setValue(10);
+    this.myForm.controls['category'].setValue('Default');
+    this.myForm.controls['locationCheckbox'].setValue(false);
+    this.myForm.controls['locationText'].enable();
+    // console.log(this.myForm.value);
+    this.isRequiredLocationText = true;
+    this.autoCompleteKeyword = '';
+    this.suggestions = [];
   }
 
   onChangeLocationCheckbox(event: any) {
@@ -79,5 +97,29 @@ export class SearchFormComponent {
     }, error => console.log(error));
   }
 
+  ngOnInit() {
+    this.autoCompleteCtrl.valueChanges.pipe(
+      filter(res => {return res !== null && res.length >= 2}),
+      distinctUntilChanged(),
+      debounceTime(1000),
+      tap(() => {
+        this.suggestions = [];
+        this.isLoading = true;
+      }),
+      switchMap(values => this.http.get('http://localhost:5000/autocomplete/' + values).pipe(
+        finalize(() => {
+          this.isLoading = false
+        }),
+        )
+      )
+    ).subscribe((data: any) => {
+      if (data === null) {
+        this.suggestions = [];
+      }
+      else {
+        this.suggestions = data;
+      }
+    })
+  }
 
 }

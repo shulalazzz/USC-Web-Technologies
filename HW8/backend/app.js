@@ -18,6 +18,7 @@ app.get('/', (req, res) => {
 });
 app.get('/search/:data', async (req, res) => {
     let data = JSON.parse(req.params['data'])
+    console.log(data)
     let loc = data['location'].split(',')
     let lat = loc[0]
     let lng = loc[1]

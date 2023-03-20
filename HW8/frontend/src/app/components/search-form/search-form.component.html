@@ -5,12 +5,28 @@
         <div class="search-panel-title">Events Search</div>
         <div class="form-group">
               <div>
-                <label class="form-label" for="keyword">Keyword<span style="color: red">*</span></label>
-                <input type="text"
-                       class="form-control"
-                       id="keyword"
-                       required
-                       formControlName="keyword">
+                <label class="form-label" for="keyword">Keyword<span style="color: red"> *</span></label><br>
+<!--                <input type="text"-->
+<!--                       class="form-control"-->
+<!--                       id="keyword"-->
+<!--                       required-->
+<!--                       formControlName="keyword">-->
+                  <input matInput [(ngModel)]="autoCompleteKeyword"
+                         [matAutocomplete]="auto"
+                         [formControl]="autoCompleteCtrl"
+                         type="text"
+                         class="form-control my-input"
+                         id="keyword"
+                         required
+                         formControlName="keyword">
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                    <ng-container *ngIf="!isLoading">
+                      <mat-option *ngFor="let suggest of suggestions" [value]="suggest">
+                        <span><b>{{suggest}}</b></span>
+                      </mat-option>
+                    </ng-container>
+                  </mat-autocomplete>
               </div>
           <div class="row">
             <div class="col-12 col-md-6">
@@ -18,7 +34,7 @@
               <input type="number" class="form-control" id="distance" value="10" formControlName="distance">
             </div>
             <div class="col-10 col-md-5">
-              <label class="form-label" for="category">Category<span style="color: red">*</span></label>
+              <label class="form-label" for="category">Category<span style="color: red"> *</span></label>
               <select class="form-control" id="category" formControlName="category">
                 <option value="Default">Default</option>
                 <option value="Music">Music</option>
@@ -30,7 +46,7 @@
             </div>
           </div>
             <div>
-              <label class="form-label" for="locationText">Location<span style="color: red">*</span></label>
+              <label class="form-label" for="locationText">Location<span style="color: red"> *</span></label>
               <input type="text" class="form-control" id="locationText" formControlName="locationText" [required]="isRequiredLocationText">
               <div style="margin-top: 1rem">
                 <input type="checkbox"
@@ -43,7 +59,7 @@
             </div>
           <div style="display: flex; justify-content: center">
             <button type="submit" class="btn btn-primary submit-btn">SUBMIT</button>
-            <button class="btn btn-primary" id="clear-button" type="reset">CLEAR</button>
+            <button type="button" class="btn btn-primary" id="clear-button" (click)="onClear()" formnovalidate>CLEAR</button>
           </div>
           </div>
       </form>
