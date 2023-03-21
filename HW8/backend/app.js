@@ -15,14 +15,18 @@ const categoryMap = {'Music': 'KZFzniwnSyZfZ7v7nJ', 'Sports': 'KZFzniwnSyZfZ7v7n
 app.use(cors({ origin: 'http://localhost:4200' }));
 
 app.get('/', (req, res) => {
-    const dates = [
-        "2020-04-10 15:00:00",
-        "2020-04-11",
-        "2020-04-09 12:30:00",
-        "2020-04-10"
-    ];
-    const sortedDates = dates.sort((a, b) => new Date(a) - new Date(b));
-    res.send(sortedDates);
+    // let dates = [
+    //     "2020-04-10\n15:00:00",
+    //     "2020-04-11\n",
+    //     "2020-04-09\n12:30:00",
+    //     "2020-04-10\n"
+    // ];
+    // dates = dates.sort((a, b) => new Date(a) - new Date(b));
+    // let a = "2020-04-10 \t 15:00:00";
+    // let b = new Date(a);
+    // console.log(b);
+    // res.send(dates);
+    res.send('Hello World');
 });
 
 function preprocessSearchData(data) {
@@ -57,6 +61,7 @@ function preprocessSearchData(data) {
         else continue
         returnData.push(event);
     }
+    returnData.sort((a, b) => new Date(a['dates']) - new Date(b['dates']));
     return returnData;
 }
 app.get('/search/:data', async (req, res) => {
