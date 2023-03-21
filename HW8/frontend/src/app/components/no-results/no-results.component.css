@@ -1,0 +1,8 @@
+.no-result-panel {
+  background-color: white;
+  color: red;
+  font-size: 1rem;
+  text-align: center;
+  border-radius: 1rem;
+  margin: 0 auto;
+}

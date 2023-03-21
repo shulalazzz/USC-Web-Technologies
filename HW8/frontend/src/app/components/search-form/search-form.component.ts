@@ -2,9 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {debounceTime, distinctUntilChanged, filter, finalize, switchMap, tap} from "rxjs/operators";
+import {ResultsTableDataService} from "../../services/results-table-data.service";
+
 
 @Component({
-  selector: 'search-form',
+  selector: 'app-search-form',
   templateUrl: './search-form.component.html',
   styleUrls: ['./search-form.component.css']
 })
@@ -17,10 +19,15 @@ export class SearchFormComponent implements OnInit{
   isLoading = false;
   suggestions: any;
 
+  searchPerformed: boolean = false;
+  showResultsTable: boolean = false;
+  showNoResultMsg: boolean = false;
+  noResultMsg: string = 'No results available';
+
   private ipInfoApi: string = "https://ipinfo.io/json?token=fcee7187512c64";
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private resultsTableDataService: ResultsTableDataService) {
     this.myForm = new FormGroup({
       keyword: new FormControl('', Validators.required),
       distance: new FormControl(10),
@@ -30,8 +37,15 @@ export class SearchFormComponent implements OnInit{
     });
   }
 
+  resetSearchConditions() {
+    this.searchPerformed = false;
+    this.showResultsTable = false;
+    this.showNoResultMsg = false;
+  }
+
   onClear() {
-    this.myForm.reset()
+    this.myForm.reset();
+    this.resetSearchConditions();
     this.myForm.controls['distance'].setValue(10);
     this.myForm.controls['category'].setValue('Default');
     this.myForm.controls['locationCheckbox'].setValue(false);
@@ -59,6 +73,7 @@ export class SearchFormComponent implements OnInit{
   }
 
   onSubmit() {
+    this.resetSearchConditions();
     if (this.myForm.valid) {
       if (this.myForm.controls['locationCheckbox'].value === true) {
         this.http.get<any>(this.ipInfoApi).subscribe(response => {
@@ -84,6 +99,7 @@ export class SearchFormComponent implements OnInit{
     }
     else {
       console.log('Form is not valid');
+      this.showNoResultMsg = true;
     }
   }
 
@@ -94,6 +110,14 @@ export class SearchFormComponent implements OnInit{
     this.http.get<any>(url).subscribe(response => {
       console.log("from frontend");
       console.log(response);
+      this.searchPerformed = true;
+      if (response !== null) {
+        this.resultsTableDataService.setData(response);
+        this.showResultsTable = true;
+      }
+      else {
+        this.showNoResultMsg = true;
+      }
     }, error => console.log(error));
   }
 

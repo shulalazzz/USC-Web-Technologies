@@ -6,16 +6,11 @@
         <div class="form-group">
               <div>
                 <label class="form-label" for="keyword">Keyword<span style="color: red"> *</span></label><br>
-<!--                <input type="text"-->
-<!--                       class="form-control"-->
-<!--                       id="keyword"-->
-<!--                       required-->
-<!--                       formControlName="keyword">-->
                   <input matInput [(ngModel)]="autoCompleteKeyword"
                          [matAutocomplete]="auto"
                          [formControl]="autoCompleteCtrl"
                          type="text"
-                         class="form-control my-input"
+                         class="form-control"
                          id="keyword"
                          required
                          formControlName="keyword">
@@ -66,3 +61,8 @@
     </div>
   </div>
 </div>
+
+<ng-container *ngIf="searchPerformed">
+  <app-results-table *ngIf="showResultsTable"></app-results-table>
+  <app-no-results *ngIf="showNoResultMsg" [msg]="noResultMsg"></app-no-results>
+</ng-container>

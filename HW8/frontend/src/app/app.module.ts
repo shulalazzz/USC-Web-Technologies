@@ -15,6 +15,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { ResultsTableComponent } from './components/results-table/results-table.component';
+import { NoResultsComponent } from './components/no-results/no-results.component';
 
 const appRoutes: Routes = [
   {path: 'search', component: SearchRouterComponent},
@@ -28,6 +30,8 @@ const appRoutes: Routes = [
     SearchRouterComponent,
     FavoritesRouterComponent,
     SearchFormComponent,
+    ResultsTableComponent,
+    NoResultsComponent,
   ],
   imports: [
     BrowserModule,

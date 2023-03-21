@@ -1,0 +1,34 @@
+.table {
+  color: white;
+  text-align: center;
+}
+
+.table-responsive {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #212424;
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #3a3a3f;
+}
+
+.table tbody{
+  cursor: pointer;
+}
+
+.table thead {
+  background-color: #212424;
+}
+
+.table thead {
+  height: 2.5rem;
+  vertical-align: middle;
+}
+
+.table-responsive td{
+  min-width: 4.5rem;
+}
