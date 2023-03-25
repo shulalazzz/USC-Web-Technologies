@@ -91,7 +91,7 @@ app.get('/search/:data', async (req, res) => {
         console.log(error);
         res.status(500).json(null);
     }
-})
+});
 
 app.get('/autocomplete/:keyword', async (req, res) => {
     let keyword = req.params['keyword'];
@@ -106,6 +106,42 @@ app.get('/autocomplete/:keyword', async (req, res) => {
             })
             // console.log(suggestions)
             res.status(200).json(suggestions);
+        }
+        else {
+            res.status(200).json(null);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(null);
+    }
+});
+
+app.get('/event/:id', async (req, res) => {
+    let id = req.params['id'];
+    let url = `https://app.ticketmaster.com/discovery/v2/events/${id}.json?apikey=${apikey}`;
+    // console.log(url);
+    try {
+        const response = await axios.get(url);
+        if ('name' in response.data) {
+            res.status(200).json(response.data);
+        }
+        else {
+            res.status(200).json(null);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(null);
+    }
+});
+
+app.get('/venue/:name', async (req, res) => {
+    let venueName = req.params['name'];
+    let url = `https://app.ticketmaster.com/discovery/v2/venues.json?apikey=${apikey}&keyword=${venueName}`;
+    try {
+        const response = await axios.get(url);
+        if ('_embedded' in response.data && 'venues' in response.data['_embedded']) {
+            let venueDetails = response.data['_embedded']['venues'][0];
+            res.status(200).json(venueDetails);
         }
         else {
             res.status(200).json(null);

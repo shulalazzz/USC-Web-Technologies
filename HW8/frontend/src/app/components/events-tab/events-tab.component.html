@@ -1,0 +1,35 @@
+<div class="container-fluid overflow-hidden">
+  <div class="row">
+    <div class="col-lg-5 col-md-5 col-sm-12 d-flex justify-content-center">
+        <div>
+          <app-events-tab-component [data]="dateData"></app-events-tab-component>
+          <app-events-tab-component [data]="artistData"></app-events-tab-component>
+          <app-events-tab-component [data]="venueData"></app-events-tab-component>
+          <app-events-tab-component [data]="genreData"></app-events-tab-component>
+          <app-events-tab-component [data]="priceData"></app-events-tab-component>
+          <app-events-tab-component [data]="ticketStatusData"></app-events-tab-component>
+          <app-events-tab-component [data]="buyTicketData"></app-events-tab-component>
+        </div>
+    </div>
+    <div class="col-lg-7 col-md-7 col-sm-12 d-flex justify-content-center align-items-center">
+        <div>
+          <app-events-tab-component [data]="mapData"></app-events-tab-component>
+        </div>
+    </div>
+  </div>
+
+<!--  <button type="button" data-href="websiteUrl"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{'https://www.ticketmaster.com/pnk-summer-carnival-2023-inglewood-california-10-05-2023/event/0A005D68C2D2346F'}}&amp;src=sdkpreparse">Facebook</a></button>-->
+<!--  <button><a href="https://twitter.com/intent/tweet?text=text goes here https://www.ticketmaster.com/pnk-summer-carnival-2023-inglewood-california-10-05-2023/event/0A005D68C2D2346F&hashtags=hashtag1,hashtag2" target="_blank">Twitter</a></button>-->
+
+
+  <div class="d-flex justify-content-center align-items-center" style="margin: 1rem auto">
+    <span style="color: white">Share on:</span>
+    <a target="_blank" href="https://twitter.com/intent/tweet?text={{'Check ' + event['name'] + ' on Ticketmaster.'}} {{shareLink}}&hashtags=hashtag1,hashtag2">
+      <i class="fa-brands fa-twitter fa-2xl" style="color: #3ac2e4; margin: 0 0.25rem 0 0.5rem"></i>
+    </a>
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{shareLink}}&amp;src=sdkpreparse">
+      <i class="fa-brands fa-facebook-square fa-2xl" style="color: #0763b2; margin: 0 0.5rem 0 0.25rem"></i>
+    </a>
+  </div>
+
+</div>

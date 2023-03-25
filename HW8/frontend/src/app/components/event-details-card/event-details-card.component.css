@@ -1,0 +1,54 @@
+.event-details-card {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  margin: 0 auto;
+  min-height: 40rem;
+}
+
+.left-angle {
+  width: 0.5rem;
+  height: 0.5rem;
+  transform: rotate(135deg);
+  border: solid white;
+  border-width: 0 1px 1px 0;
+  float: left;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: white;
+}
+
+.btn-link:hover,
+.btn-link:focus {
+  color: white;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.customized-fab {
+  background-color: white;
+  margin-left: 1rem;
+  color: red;
+}
+
+.mat-mdc-tab-labels {
+  background-color: #4c9173;
+}
+
+.mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label, .mat-mdc-tab-link:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label {
+  color: white;
+}
+
+.mat-mdc-tab .mdc-tab__text-label, .mat-mdc-tab-link .mdc-tab__text-label {
+  color: white;
+}

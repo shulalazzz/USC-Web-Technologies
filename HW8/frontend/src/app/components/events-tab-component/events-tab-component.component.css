@@ -1,0 +1,31 @@
+.header-component {
+  color: aqua;
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.content {
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.ticket-status {
+  color: white;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+}
+
+.collapsed {
+  color: white;
+  height: 2.5rem;
+  overflow: hidden;
+}
+
+.btn, .btn:active, .btn:focus {
+  font-size: 0.8rem;
+  color: aqua;
+  text-decoration: underline;
+  border: none;
+}

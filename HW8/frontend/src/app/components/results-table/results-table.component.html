@@ -10,7 +10,7 @@
     </tr>
     </thead>
     <tbody>
-          <tr *ngFor="let event of eventData" (click)="onRowClicked(event)">
+          <tr *ngFor="let event of eventData" (click)="onEventClicked(event)">
             <td style="white-space: pre">{{event['dates']}}</td>
             <td><img src="{{event['images']}}" alt="event icon" width="60rem" height="60rem"></td>
             <td>{{event['eventName']}}</td>

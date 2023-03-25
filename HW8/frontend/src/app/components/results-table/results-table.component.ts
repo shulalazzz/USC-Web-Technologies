@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ResultsTableDataService} from "../../services/results-table-data.service";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-results-table',
@@ -8,12 +9,18 @@ import {ResultsTableDataService} from "../../services/results-table-data.service
 })
 export class ResultsTableComponent implements OnInit{
   eventData: any;
+  backendEventDetailsUrl: string = 'http://localhost:5000/event/';
+  @Output() eventClicked = new EventEmitter<any>();
 
-  constructor(private resultsTableDataService: ResultsTableDataService) {
+  constructor(private resultsTableDataService: ResultsTableDataService, private http: HttpClient) {
   }
 
-  onRowClicked(event: any) {
-    console.log(event);
+  onEventClicked(event: any) {
+    // console.log(event);
+    this.http.get<any>(this.backendEventDetailsUrl + event.id).subscribe((data: any) => {
+      // console.log(data);
+      this.eventClicked.emit(data);
+    })
   }
 
   ngOnInit() {

@@ -1,0 +1,28 @@
+<div class="container-fluid">
+  <div class="event-details-card col-12 col-md-8">
+    <button class="back-button btn btn-link" (click)="onBackButtonClicked()">
+      <div class="left-angle"></div>
+      <div>Back</div>
+    </button>
+    <div class="title-container">
+      <div>{{event['name']}}</div>
+      <div>
+        <button mat-mini-fab class="customized-fab" style="background-color: white">
+<!--            <mat-icon style="color: red">favorite</mat-icon>-->
+          <mat-icon style="color:gray">favorite_border</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+      <mat-tab label="Events">
+        <app-events-tab [event]="event"></app-events-tab>
+      </mat-tab>
+      <mat-tab label="Artist/Teams">Overview Content</mat-tab>
+      <mat-tab label="Venue">
+        <app-venue-tab [venueName]="event['_embedded']['venues'][0]['name']"></app-venue-tab>
+      </mat-tab>
+    </mat-tab-group>
+
+  </div>
+</div>

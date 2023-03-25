@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="search-panel col-12 col-md-8 col-xl-6">
       <form [formGroup]="myForm" (ngSubmit)="onSubmit()" ngNativeValidate>
@@ -15,7 +15,9 @@
                          required
                          formControlName="keyword">
                   <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+                    <mat-option *ngIf="isLoading">
+                      <mat-progress-spinner style="width: 1.5rem; height: 1.5rem;" mode="indeterminate"></mat-progress-spinner>
+                    </mat-option>
                     <ng-container *ngIf="!isLoading">
                       <mat-option *ngFor="let suggest of suggestions" [value]="suggest">
                         <span><b>{{suggest}}</b></span>
@@ -62,7 +64,13 @@
   </div>
 </div>
 
+<app-event-details-card [event]="selectedEvent" (backButtonClicked)="onBackButtonClicked()"></app-event-details-card>
 <ng-container *ngIf="searchPerformed">
-  <app-results-table *ngIf="showResultsTable"></app-results-table>
-  <app-no-results *ngIf="showNoResultMsg" [msg]="noResultMsg"></app-no-results>
+  <div *ngIf="haveSelectedEvent && selectedEvent !== null; else resultsTableTemplate">
+<!--    <app-event-details-card [event]="selectedEvent" (backButtonClicked)="onBackButtonClicked()"></app-event-details-card>-->
+  </div>
+  <ng-template #resultsTableTemplate>
+      <app-results-table *ngIf="showResultsTable" (eventClicked)="onEventClicked($event)"></app-results-table>
+      <app-no-results *ngIf="!showResultsTable" [msg]="noResultMsg"></app-no-results>
+  </ng-template>
 </ng-container>

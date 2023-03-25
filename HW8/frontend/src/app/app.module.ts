@@ -11,12 +11,21 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { GoogleMapsModule } from '@angular/google-maps'
 
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { SearchRouterComponent } from './components/search-router/search-router.component';
 import { FavoritesRouterComponent } from './components/favorites-router/favorites-router.component';
 import { ResultsTableComponent } from './components/results-table/results-table.component';
 import { NoResultsComponent } from './components/no-results/no-results.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { EventDetailsCardComponent } from './components/event-details-card/event-details-card.component';
+import {MatTabsModule} from "@angular/material/tabs";
+import { EventsTabComponent } from './components/events-tab/events-tab.component';
+import { ArtistTabComponent } from './components/artist-tab/artist-tab.component';
+import { VenueTabComponent } from './components/venue-tab/venue-tab.component';
+import { EventsTabComponentComponent } from './components/events-tab-component/events-tab-component.component';
+import { GoogleMapComponent } from './components/google-map/google-map.component';
 
 const appRoutes: Routes = [
   {path: 'search', component: SearchRouterComponent},
@@ -32,6 +41,12 @@ const appRoutes: Routes = [
     SearchFormComponent,
     ResultsTableComponent,
     NoResultsComponent,
+    EventDetailsCardComponent,
+    EventsTabComponent,
+    ArtistTabComponent,
+    VenueTabComponent,
+    EventsTabComponentComponent,
+    GoogleMapComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,6 +61,9 @@ const appRoutes: Routes = [
     MatIconModule,
     MatButtonModule,
     MatAutocompleteModule,
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    GoogleMapsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

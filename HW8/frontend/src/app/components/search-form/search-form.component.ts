@@ -17,12 +17,16 @@ export class SearchFormComponent implements OnInit{
   autoCompleteKeyword: string = '';
   autoCompleteCtrl = new FormControl();
   isLoading = false;
-  suggestions: any;
+  suggestions: any = [];
 
   searchPerformed: boolean = false;
+  haveSelectedEvent: boolean = false;
+  selectedEvent: any;
   showResultsTable: boolean = false;
   showNoResultMsg: boolean = false;
   noResultMsg: string = 'No results available';
+  backendSearchUrl: string = 'http://localhost:5000/search/';
+  backendAutoCompleteUrl: string = 'http://localhost:5000/autocomplete/';
 
   private ipInfoApi: string = "https://ipinfo.io/json?token=fcee7187512c64";
 
@@ -37,10 +41,23 @@ export class SearchFormComponent implements OnInit{
     });
   }
 
+  onEventClicked(event: any) {
+    this.haveSelectedEvent = true;
+    // console.log('from search-form.component.ts onEventClicked()')
+    // console.log(event);
+    this.selectedEvent = event;
+  }
+
+  onBackButtonClicked() {
+    this.haveSelectedEvent = false;
+    // this.selectedEvent = null;
+  }
+
   resetSearchConditions() {
     this.searchPerformed = false;
     this.showResultsTable = false;
     this.showNoResultMsg = false;
+    this.haveSelectedEvent = false;
   }
 
   onClear() {
@@ -106,10 +123,10 @@ export class SearchFormComponent implements OnInit{
   sendToBackendSearch(location: string) {
     this.myForm.value['location'] = location;
     const params = JSON.stringify(this.myForm.value);
-    const url = 'http://localhost:5000/search/' + params;
+    const url = this.backendSearchUrl + params;
     this.http.get<any>(url).subscribe(response => {
-      console.log("from frontend");
-      console.log(response);
+      // console.log("from search-form.component.ts");
+      // console.log(response);
       this.searchPerformed = true;
       if (response !== null) {
         this.resultsTableDataService.setData(response);
@@ -123,14 +140,14 @@ export class SearchFormComponent implements OnInit{
 
   ngOnInit() {
     this.autoCompleteCtrl.valueChanges.pipe(
-      filter(res => {return res !== null && res.length >= 2}),
+      filter(res => {return res !== null && res !== ''}),
       distinctUntilChanged(),
       debounceTime(1000),
       tap(() => {
         this.suggestions = [];
         this.isLoading = true;
       }),
-      switchMap(values => this.http.get('http://localhost:5000/autocomplete/' + values).pipe(
+      switchMap(values => this.http.get(this.backendAutoCompleteUrl + values).pipe(
         finalize(() => {
           this.isLoading = false
         }),

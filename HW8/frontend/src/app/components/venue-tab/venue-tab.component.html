@@ -1,0 +1,23 @@
+<div class="container-fluid overflow-hidden">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center">
+      <div>
+        <app-events-tab-component [data]="nameData"></app-events-tab-component>
+        <app-events-tab-component [data]="addressData"></app-events-tab-component>
+        <app-events-tab-component [data]="phoneNumberData"></app-events-tab-component>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center">
+      <div>
+        <app-events-tab-component [data]="openHoursData"></app-events-tab-component>
+        <app-events-tab-component [data]="generalRuleData"></app-events-tab-component>
+        <app-events-tab-component [data]="childRuleData"></app-events-tab-component>
+      </div>
+    </div>
+  </div>
+<!--  <div class="my-google-map">-->
+<!--    <app-google-map [options]="mapOptions">-->
+<!--      <map-marker [position]="marker.position"></map-marker>-->
+<!--    </app-google-map>-->
+<!--  </div>-->
+</div>
