@@ -1,1 +1,18 @@
-<p>google-map works!</p>
+<ng-template #content let-modal>
+  <div class="modal-header" style="padding-bottom: 0">
+    <h2 class="modal-title" id="modal-basic-title">Event Venue</h2>
+<!--    <button type="button" class="btn-close" aria-label="Close" (click)="modal.close('click')"></button>-->
+  </div>
+  <div class="modal-body">
+
+      <google-map [options]="mapOptions" height="{{'400px'}}" width="{{'100%'}}">
+        <map-marker [position]="marker.position"></map-marker>
+      </google-map>
+
+  </div>
+  <div class="modal-footer d-flex justify-content-start">
+    <button type="button" class="btn btn-dark" (click)="modal.close('cancel click')">Close</button>
+  </div>
+</ng-template>
+
+<button class="btn btn-primary btn-danger" (click)="open(content)">Show venue on Google map</button>

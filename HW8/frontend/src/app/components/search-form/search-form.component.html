@@ -55,7 +55,7 @@
               </div>
             </div>
           <div style="display: flex; justify-content: center">
-            <button type="submit" class="btn btn-primary submit-btn">SUBMIT</button>
+            <button type="submit" class="btn btn-primary btn-danger">SUBMIT</button>
             <button type="button" class="btn btn-primary" id="clear-button" (click)="onClear()" formnovalidate>CLEAR</button>
           </div>
           </div>
@@ -63,6 +63,12 @@
     </div>
   </div>
 </div>
+
+
+<!--<div class="d-flex justify-content-center mt-3">-->
+<!--  <app-google-map></app-google-map>-->
+<!--</div>-->
+
 
 <app-event-details-card [event]="selectedEvent" (backButtonClicked)="onBackButtonClicked()"></app-event-details-card>
 <ng-container *ngIf="searchPerformed">

@@ -18,7 +18,17 @@
       <mat-tab label="Events">
         <app-events-tab [event]="event"></app-events-tab>
       </mat-tab>
-      <mat-tab label="Artist/Teams">Overview Content</mat-tab>
+      <mat-tab label="Artist/Teams">
+        <app-artist-tab [artists]="artistsArr"></app-artist-tab>
+        <ng-container *ngIf="artistsArr.length > 0; else noResultsTemplate">
+          <app-artist-tab [artists]="artistsArr"></app-artist-tab>
+        </ng-container>
+        <ng-template #noResultsTemplate>
+          <div class="mt-5">
+            <app-no-results [msg]="noMusicArtistMSG"></app-no-results>
+          </div>
+        </ng-template>
+      </mat-tab>
       <mat-tab label="Venue">
         <app-venue-tab [venueName]="event['_embedded']['venues'][0]['name']"></app-venue-tab>
       </mat-tab>

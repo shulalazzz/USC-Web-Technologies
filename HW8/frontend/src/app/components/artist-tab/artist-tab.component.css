@@ -1,0 +1,12 @@
+.artist-img {
+  object-fit: cover;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+}
+
+.small-title {
+  color: aqua;
+  font-size: 1rem;
+  font-weight: bold;
+}

@@ -11,6 +11,7 @@ export class EventDetailsCardComponent implements OnInit{
   @Output() backButtonClicked = new EventEmitter<boolean>();
 
   artistsArr: any = [];
+  noMusicArtistMSG: string = 'No music related artist details to show';
 
 
 
@@ -446,12 +447,13 @@ export class EventDetailsCardComponent implements OnInit{
         ]
       }
     }
-    if (this.event) {
-      if (this.event.hasOwnProperty('_embedded') && this.event['_embedded'].hasOwnProperty('attractions')) {
-        for (let i = 0; i < this.event['_embedded']['attractions'].length; i++) {
-          this.artistsArr.push(this.event['_embedded']['attractions'][i]['name']);
+    if (this.event?.['_embedded']?.attractions?.length) {
+      this.event['_embedded']['attractions'].forEach((attraction :any) => {
+        if (attraction?.['classifications']?.[0]?.['segment']?.['name']?.includes('Music')) {
+          this.artistsArr.push(attraction['name'] ?? '');
         }
-      }
+      });
+      console.log("from event detail, found music artists: ", this.artistsArr);
     }
   }
 

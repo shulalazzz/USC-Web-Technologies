@@ -9,6 +9,7 @@ import {HttpClient} from "@angular/common/http";
 export class VenueTabComponent implements OnInit{
   @Input() venueName: any;
   backendVenueUrl: string = 'http://localhost:5000/venue/';
+  venueLocation: any;
   // 0 for plain text, 1 for link, 2 for status, 3 for map, 4 for text expand
   nameData: {header: string, content: string, type: number} = {
     header: '',
@@ -26,15 +27,6 @@ export class VenueTabComponent implements OnInit{
     type: 0
   };
 
-  textExpandData: {header: string, content: string, type: number} = {
-    header: 'text',
-    content: 'This is the text expand, This is the text expand, This is the text expand, This is the text expand, ' +
-      'This is the text expand, This is the text expand, This is the text expand, This is the text expand,' +
-      'This is the text expand,This is the text expand,This is the text expand,This is the text expand,' +
-      'This is the text expand,This is the text expand,This is the text expand,This is the text expand,This is the text expand,' +
-      'This is the text expand,This is the text expand,This is the text expand,This is the text expand,This is the text expand,',
-    type: 4
-  }
 
   openHoursData: {header: string, content: string, type: number} = {
     header: '',
@@ -53,15 +45,6 @@ export class VenueTabComponent implements OnInit{
     content: '',
     type: 4
   }
-
-  mapOptions: google.maps.MapOptions = {
-    center: { lat: 38.9987208, lng: -77.2538699 },
-    zoom : 14
-  }
-  marker = {
-    position: { lat: 38.9987208, lng: -77.2538699 },
-  }
-
 
   constructor(private http: HttpClient) {}
   ngOnInit() {
@@ -103,6 +86,11 @@ export class VenueTabComponent implements OnInit{
       }
       if (data.hasOwnProperty('generalInfo') && data['generalInfo'].hasOwnProperty('childRule')) {
         this.childRuleData = {header: "Child Rule", content: data['generalInfo']['childRule'], type: 4};
+      }
+      if (data.hasOwnProperty('location') && data['location'].hasOwnProperty('latitude') && data['location'].hasOwnProperty('longitude')) {
+        this.venueLocation = {lat: parseFloat(data['location']['latitude']), lng: parseFloat(data['location']['longitude'])}
+        // console.log("from venue tab setVenueData");
+        // console.log(this.venueLocation);
       }
     }
   }

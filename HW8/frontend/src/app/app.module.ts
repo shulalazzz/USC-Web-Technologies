@@ -26,6 +26,7 @@ import { ArtistTabComponent } from './components/artist-tab/artist-tab.component
 import { VenueTabComponent } from './components/venue-tab/venue-tab.component';
 import { EventsTabComponentComponent } from './components/events-tab-component/events-tab-component.component';
 import { GoogleMapComponent } from './components/google-map/google-map.component';
+import {NgCircleProgressModule} from "ng-circle-progress";
 
 const appRoutes: Routes = [
   {path: 'search', component: SearchRouterComponent},
@@ -48,23 +49,39 @@ const appRoutes: Routes = [
     EventsTabComponentComponent,
     GoogleMapComponent,
   ],
-  imports: [
-    BrowserModule,
-    RouterModule.forRoot(appRoutes, {enableTracing: true}),
-    FormsModule,
-    ReactiveFormsModule,
-    MatTooltipModule,
-    NgbModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatAutocompleteModule,
-    MatProgressSpinnerModule,
-    MatTabsModule,
-    GoogleMapsModule,
-  ],
+    imports: [
+        BrowserModule,
+        RouterModule.forRoot(appRoutes, {enableTracing: true}),
+        FormsModule,
+        ReactiveFormsModule,
+        MatTooltipModule,
+        NgbModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatAutocompleteModule,
+        MatProgressSpinnerModule,
+        MatTabsModule,
+        GoogleMapsModule,
+      NgCircleProgressModule.forRoot({
+        // set defaults here
+        radius: 100,
+        outerStrokeWidth: 5,
+        innerStrokeWidth: 5,
+        outerStrokeColor: "#f72020",
+        innerStrokeColor: "#0763b2",
+        animationDuration: 300,
+        showSubtitle: false,
+        showBackground: false,
+        animateTitle: false,
+        showInnerStroke: false,
+        showUnits: false,
+        renderOnClick: false,
+        titleColor: "#ffffff",
+      })
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

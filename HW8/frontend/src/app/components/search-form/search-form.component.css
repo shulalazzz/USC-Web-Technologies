@@ -24,19 +24,4 @@
   margin: 1rem 1rem;
 }
 
-.submit-btn {
-  background-color: #f72020;
-  border-color: #f72020;
-}
-
-.submit-btn:hover {
-  background-color: #c31919;
-  border-color: #c31919;
-}
-
-.submit-btn:active {
-  background-color: #9b1414;
-  border-color: #9b1414;
-}
-
 

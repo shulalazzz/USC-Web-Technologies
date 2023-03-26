@@ -2,6 +2,7 @@ const express = require('express');
 const geoHash = require('ngeohash');
 const axios = require('axios');
 const cors = require('cors');
+const SpotifyWebApi = require('spotify-web-api-node');
 
 const app = express();
 
@@ -12,20 +13,18 @@ const apikey = 'pviXh7vSvsPRcVqdsl6D1b1deOhtRKcb';
 const categoryMap = {'Music': 'KZFzniwnSyZfZ7v7nJ', 'Sports': 'KZFzniwnSyZfZ7v7nE', 'Arts': 'KZFzniwnSyZfZ7v7na',
     'Film': 'KZFzniwnSyZfZ7v7nn', 'Miscellaneous': 'KZFzniwnSyZfZ7v7n1', 'Default': ''};
 
+const spotifyApi = new SpotifyWebApi({
+    clientId: '18b00b32220347659ee24add2e2029aa',
+    clientSecret: 'c083a247e7a14bab9df99084f18f12ad',
+    redirectUri: 'http://localhost:5000/callback'
+});
+
+let accessToken = '';
+
 app.use(cors({ origin: 'http://localhost:4200' }));
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
 app.get('/', (req, res) => {
-    // let dates = [
-    //     "2020-04-10\n15:00:00",
-    //     "2020-04-11\n",
-    //     "2020-04-09\n12:30:00",
-    //     "2020-04-10\n"
-    // ];
-    // dates = dates.sort((a, b) => new Date(a) - new Date(b));
-    // let a = "2020-04-10 \t 15:00:00";
-    // let b = new Date(a);
-    // console.log(b);
-    // res.send(dates);
     res.send('Hello World');
 });
 
@@ -150,7 +149,94 @@ app.get('/venue/:name', async (req, res) => {
         console.log(error);
         res.status(500).json(null);
     }
-})
+});
 
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+function getAccessTokenAndSearchKeyword(keyword, res) {
+    spotifyApi.clientCredentialsGrant()
+        .then(data => {
+            accessToken = data.body['access_token'];
+            spotifyApi.setAccessToken(accessToken);
+            return spotifyApi.searchArtists(keyword);
+        })
+        .then(data => {
+            const artistData = data?.['body']?.['artists']?.['items']?.[0];
+            res.status(200).json(artistData)
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json(null);
+        });
+}
+
+app.get('/spotifyArtist/:keyword', (req, res) => {
+    const keyword = req.params['keyword'];
+    console.log(spotifyApi.getAccessToken());
+    if (accessToken !== '' && spotifyApi.getAccessToken() !== '') {
+        // Access token is still valid
+        console.log('Access token is still valid');
+        spotifyApi.setAccessToken(accessToken);
+        spotifyApi.searchArtists(keyword)
+            .then(data => {
+                const artistData = data?.['body']?.['artists']?.['items']?.[0];
+                res.status(200).json(artistData)
+            })
+            .catch(err => {
+                console.error(err);
+                if (err.statusCode === 401) {
+                    // Access token is expired
+                    getAccessTokenAndSearchKeyword(keyword, res);
+                }
+                else {
+                    res.status(500).json(null);
+                }
+            });
+    } else {
+        // Access token needs to be refreshed
+        getAccessTokenAndSearchKeyword(keyword, res);
+    }
+});
+
+function getAccessTokenAndSearchId(id, res) {
+    spotifyApi.clientCredentialsGrant()
+        .then(data => {
+            accessToken = data.body['access_token'];
+            spotifyApi.setAccessToken(accessToken);
+            return spotifyApi.getArtistAlbums(id, {limit: 3});
+        })
+        .then(data => {
+            const albumData = data?.['body']?.['items'];
+            res.status(200).json(albumData)
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json(null);
+        });
+}
+app.get('/spotifyAlbum/:id', (req, res) => {
+    const id = req.params['id'];
+    console.log(spotifyApi.getAccessToken());
+    if (accessToken !== '' && spotifyApi.getAccessToken() !== '') {
+        // Access token is still valid
+        console.log('Access token is still valid');
+        spotifyApi.setAccessToken(accessToken);
+        spotifyApi.getArtistAlbums(id, { limit: 3 })
+            .then(data => {
+                const albumData = data?.['body']?.['items'];
+                res.status(200).json(albumData)
+            })
+            .catch(err => {
+                console.error(err);
+                if (err.statusCode === 401) {
+                    // Access token is expired
+                    getAccessTokenAndSearchId(id, res);
+                }
+                else {
+                    res.status(500).json(null);
+                }
+            });
+    } else {
+        // Access token needs to be refreshed
+        getAccessTokenAndSearchId(id, res);
+    }
+});
