@@ -1,38 +1,37 @@
-<div class="wrapper">
-  <mat-form-field class="example-full-width">
-    <input matInput [(ngModel)]="selectedMovie" [matAutocomplete]="auto"
-           [formControl]="searchMoviesCtrl" placeholder="Min 3 Characters Ex. Ant">
-<!--    <button *ngIf="selectedMovie" matSuffix mat-icon-button aria-label="Clear" (click)="clearSelection()">-->
-<!--      <mat-icon>close</mat-icon>-->
-<!--    </button>-->
-    <mat-autocomplete [panelWidth]="400" #auto="matAutocomplete" (optionSelected)="onSelected()"
-                      [displayWith]="displayWith">
-      <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
-      <ng-container *ngIf="!isLoading">
-        <mat-option *ngFor="let movie of filteredMovies" [value]="movie">
-          <span><b>{{movie.Title}}</b> ({{movie.Year}})</span>
-        </mat-option>
-      </ng-container>
-    </mat-autocomplete>
-  </mat-form-field>
-
-  <br>
-
-<!--  <ng-container *ngIf="errorMsg; else elseTemplate">-->
-<!--    {{errorMsg}}-->
-<!--  </ng-container>-->
-<!--  <ng-template #elseTemplate>-->
-<!--    <div class="movie-details" *ngIf="selectedMovie?.Title">-->
-<!--      <div>-->
-<!--        <img [src]="selectedMovie?.Poster" style="height: 250px;" />-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <h3>Selected Value: {{selectedMovie?.Title}}</h3>-->
-<!--        <ul>-->
-<!--          <li>Year: {{selectedMovie?.Year}}</li>-->
-<!--        </ul>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </ng-template>-->
-
+<div *ngIf="events.length > 0; else noResultTemplate">
+    <div class="text-center">
+      <h3 class="my-title">List of your favorite events</h3>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Date</th>
+          <th scope="col">Event</th>
+          <th scope="col">Category</th>
+          <th scope="col">Venue</th>
+          <th scope="col">Favorite</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let event of events; let i = index">
+          <td style="font-weight: bold">{{i + 1}}</td>
+          <td>{{event['date']}}</td>
+          <td>{{event['eventName']}}</td>
+          <td>{{event['genre']}}</td>
+          <td>{{event['venue']}}</td>
+          <td>
+            <i class="fa-solid fa-trash-can my-trash-can" (click)="onDeleteClick(event)"></i>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 </div>
+
+<ng-template #noResultTemplate>
+  <div class="mt-5">
+    <app-no-results [msg]="noResultMsg"></app-no-results>
+  </div>
+</ng-template>

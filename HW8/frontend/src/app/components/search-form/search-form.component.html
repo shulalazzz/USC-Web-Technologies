@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="row">
+  <div class="row p-2">
     <div class="search-panel col-12 col-md-8 col-xl-6">
       <form [formGroup]="myForm" (ngSubmit)="onSubmit()" ngNativeValidate>
         <div class="search-panel-title">Events Search</div>
@@ -62,21 +62,17 @@
       </form>
     </div>
   </div>
-</div>
-
-
-<!--<div class="d-flex justify-content-center mt-3">-->
-<!--  <app-google-map></app-google-map>-->
-<!--</div>-->
-
-
-<app-event-details-card [event]="selectedEvent" (backButtonClicked)="onBackButtonClicked()"></app-event-details-card>
-<ng-container *ngIf="searchPerformed">
-  <div *ngIf="haveSelectedEvent && selectedEvent !== null; else resultsTableTemplate">
-<!--    <app-event-details-card [event]="selectedEvent" (backButtonClicked)="onBackButtonClicked()"></app-event-details-card>-->
-  </div>
-  <ng-template #resultsTableTemplate>
+  <ng-container *ngIf="searchPerformed">
+    <div *ngIf="haveSelectedEvent && selectedEvent !== null; else resultsTableTemplate">
+      <app-event-details-card [event]="selectedEvent" (backButtonClicked)="onBackButtonClicked()"></app-event-details-card>
+    </div>
+    <ng-template #resultsTableTemplate>
       <app-results-table *ngIf="showResultsTable" (eventClicked)="onEventClicked($event)"></app-results-table>
       <app-no-results *ngIf="!showResultsTable" [msg]="noResultMsg"></app-no-results>
-  </ng-template>
-</ng-container>
+    </ng-template>
+  </ng-container>
+</div>
+
+<!--<app-event-details-card [event]="selectedEvent" (backButtonClicked)="onBackButtonClicked()"></app-event-details-card>-->
+
+

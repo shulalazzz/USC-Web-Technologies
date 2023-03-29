@@ -24,8 +24,8 @@ export class EventsTabComponent implements OnInit{
     if (this.event) {
       if (this.event.hasOwnProperty('dates')) {
         let date = this.event['dates']['start']['localDate'];
-        let time = this.event['dates']['start'].hasOwnProperty('localTime') ? this.event['dates']['start']['localTime'] : '';
-        this.dateData = { header: 'Date', content: date + ' ' + time, type: 0 };
+        // let time = this.event['dates']['start'].hasOwnProperty('localTime') ? this.event['dates']['start']['localTime'] : '';
+        this.dateData = { header: 'Date', content: date, type: 0 };
       }
       if (this.event.hasOwnProperty('_embedded') && this.event['_embedded'].hasOwnProperty('attractions')) {
         for (let i = 0; i < this.event['_embedded']['attractions'].length; i++) {

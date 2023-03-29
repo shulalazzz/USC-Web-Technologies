@@ -8,7 +8,7 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./results-table.component.css']
 })
 export class ResultsTableComponent implements OnInit{
-  eventData: any;
+  eventsData: any;
   backendEventDetailsUrl: string = 'http://localhost:5000/event/';
   @Output() eventClicked = new EventEmitter<any>();
 
@@ -24,6 +24,6 @@ export class ResultsTableComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.resultsTableDataService.getData().subscribe((data: any) => {this.eventData = data})
+    this.resultsTableDataService.getData().subscribe((data: any) => {this.eventsData = data})
   }
 }

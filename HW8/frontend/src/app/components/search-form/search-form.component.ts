@@ -105,7 +105,8 @@ export class SearchFormComponent implements OnInit{
         this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyAhrUOOniYwPz_aLnuKi2M6v3DfG50oH5o`).subscribe(response => {
           // console.log(response);
           if (response.status === "ZERO_RESULTS") {
-            alert("Invalid location");
+            console.log("Invalid location");
+            this.searchPerformed = true;
             return;
           }
           let location :string = response.results[0].geometry.location.lat + ',' + response.results[0].geometry.location.lng;

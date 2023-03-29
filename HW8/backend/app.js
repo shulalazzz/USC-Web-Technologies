@@ -65,7 +65,7 @@ function preprocessSearchData(data) {
 }
 app.get('/search/:data', async (req, res) => {
     let data = JSON.parse(req.params['data']);
-    console.log(data);
+    // console.log(data);
     let loc = data['location'].split(',');
     let lat = loc[0];
     let lng = loc[1];
@@ -171,10 +171,10 @@ function getAccessTokenAndSearchKeyword(keyword, res) {
 
 app.get('/spotifyArtist/:keyword', (req, res) => {
     const keyword = req.params['keyword'];
-    console.log(spotifyApi.getAccessToken());
+    // console.log(spotifyApi.getAccessToken());
     if (accessToken !== '' && spotifyApi.getAccessToken() !== '') {
         // Access token is still valid
-        console.log('Access token is still valid');
+        // console.log('Access token is still valid');
         spotifyApi.setAccessToken(accessToken);
         spotifyApi.searchArtists(keyword)
             .then(data => {
@@ -215,10 +215,10 @@ function getAccessTokenAndSearchId(id, res) {
 }
 app.get('/spotifyAlbum/:id', (req, res) => {
     const id = req.params['id'];
-    console.log(spotifyApi.getAccessToken());
+    console.log("getting albums for id: " + id);
     if (accessToken !== '' && spotifyApi.getAccessToken() !== '') {
         // Access token is still valid
-        console.log('Access token is still valid');
+        // console.log('Access token is still valid');
         spotifyApi.setAccessToken(accessToken);
         spotifyApi.getArtistAlbums(id, { limit: 3 })
             .then(data => {

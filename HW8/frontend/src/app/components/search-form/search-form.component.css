@@ -24,4 +24,6 @@
   margin: 1rem 1rem;
 }
 
-
+.container-fluid {
+  padding: 0 0 3rem;
+}
