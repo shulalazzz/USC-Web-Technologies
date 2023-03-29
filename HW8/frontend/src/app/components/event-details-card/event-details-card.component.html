@@ -1,12 +1,13 @@
-<div class="container-fluid">
+<div class="container-fluid" style="padding: 0">
   <div class="event-details-card col-12 col-md-8">
     <button class="back-button btn btn-link" (click)="onBackButtonClicked()">
       <div class="left-angle"></div>
       <div>Back</div>
     </button>
-    <div class="title-container">
-      <div><h2>{{event['name']}}</h2></div>
-      <div>
+    <div class="title-container row d-flex align-items-center justify-content-center">
+      <div class="col-auto text-center p-0"><h2>{{event['name']}}</h2></div>
+<!--      <div class="col-auto text-center p-0"><h2>{{"PINK safasfhio siofhsakl sfnskj nnn safasf sfs"}}</h2></div>-->
+      <div class="col-auto p-0">
         <button mat-mini-fab class="customized-fab" style="background-color: white" (click)="onFavoriteButtonClicked()">
             <mat-icon style="color: red" *ngIf="eventInFav">favorite</mat-icon>
           <mat-icon style="color:gray" *ngIf="!eventInFav">favorite_border</mat-icon>

@@ -22,7 +22,7 @@ export class GoogleMapComponent implements OnChanges{
   constructor(private modalService: NgbModal) {}
 
   open(content: any) {
-    this.modalService.open(content);
+    this.modalService.open(content, {backdrop: 'static'});
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['centerPosition']) {
