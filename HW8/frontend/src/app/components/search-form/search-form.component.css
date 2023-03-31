@@ -27,3 +27,7 @@
 .container-fluid {
   padding: 0 0 3rem;
 }
+
+select {
+  appearance: auto;
+}

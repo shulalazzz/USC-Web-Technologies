@@ -8,7 +8,8 @@ import {HttpClient} from "@angular/common/http";
 })
 export class VenueTabComponent implements OnInit{
   @Input() venueName: any;
-  backendVenueUrl: string = 'http://localhost:5000/venue/';
+  // backendVenueUrl: string = 'http://localhost:5000/venue/';
+  backendVenueUrl: string = 'https://csci-571-hw8-382201.wl.r.appspot.com/venue/';
   venueLocation: any;
   // 0 for plain text, 1 for link, 2 for status, 3 for map, 4 for text expand
   nameData: {header: string, content: string, type: number} = {

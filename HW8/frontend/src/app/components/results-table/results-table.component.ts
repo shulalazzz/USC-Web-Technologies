@@ -9,7 +9,8 @@ import {HttpClient} from "@angular/common/http";
 })
 export class ResultsTableComponent implements OnInit{
   eventsData: any;
-  backendEventDetailsUrl: string = 'http://localhost:5000/event/';
+  // backendEventDetailsUrl: string = 'http://localhost:5000/event/';
+  backendEventDetailsUrl: string = 'https://csci-571-hw8-382201.wl.r.appspot.com/event/';
   @Output() eventClicked = new EventEmitter<any>();
 
   constructor(private resultsTableDataService: ResultsTableDataService, private http: HttpClient) {

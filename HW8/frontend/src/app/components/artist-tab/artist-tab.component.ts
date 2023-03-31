@@ -10,7 +10,8 @@ import {catchError, forkJoin, map, Observable, of} from 'rxjs';
 })
 export class ArtistTabComponent implements OnInit {
   @Input() artistNames: String[] = [];
-  backendUrl: string = 'http://localhost:5000/';
+  // backendUrl: string = 'http://localhost:5000/';
+  backendUrl: string = 'https://csci-571-hw8-382201.wl.r.appspot.com/';
   processedArtists: any = [];
 
   constructor(private http: HttpClient) { }

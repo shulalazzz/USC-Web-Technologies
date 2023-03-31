@@ -25,8 +25,11 @@ export class SearchFormComponent implements OnInit{
   showResultsTable: boolean = false;
   showNoResultMsg: boolean = false;
   noResultMsg: string = 'No results available';
-  backendSearchUrl: string = 'http://localhost:5000/search/';
-  backendAutoCompleteUrl: string = 'http://localhost:5000/autocomplete/';
+  // backendSearchUrl: string = 'http://localhost:5000/search/';
+  backendSearchUrl: string = 'https://csci-571-hw8-382201.wl.r.appspot.com/search/';
+  // backendAutoCompleteUrl: string = 'http://localhost:5000/autocomplete/';
+  backendAutoCompleteUrl: string = 'https://csci-571-hw8-382201.wl.r.appspot.com/autocomplete/';
+  // https://csci-571-hw8-382201.wl.r.appspot.com/search
 
   private ipInfoApi: string = "https://ipinfo.io/json?token=fcee7187512c64";
 

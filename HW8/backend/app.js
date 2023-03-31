@@ -16,7 +16,6 @@ const categoryMap = {'Music': 'KZFzniwnSyZfZ7v7nJ', 'Sports': 'KZFzniwnSyZfZ7v7n
 const spotifyApi = new SpotifyWebApi({
     clientId: '18b00b32220347659ee24add2e2029aa',
     clientSecret: 'c083a247e7a14bab9df99084f18f12ad',
-    redirectUri: 'http://localhost:5000/callback'
 });
 
 let accessToken = '';
