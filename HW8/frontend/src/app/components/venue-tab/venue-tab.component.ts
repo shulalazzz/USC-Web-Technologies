@@ -56,9 +56,18 @@ export class VenueTabComponent implements OnInit{
     this.venueName = this.venueName.split(' ').join('+');
     this.http.get<any>(this.backendVenueUrl + this.venueName).subscribe(data => {
       if (data.hasOwnProperty('name')) {
-        this.setVenueData(data)
+        this.setVenueData(data);
       }
-    }, error => {console.log(error)});
+    }, error => {
+      console.log(error);
+      // if backend server is down, try again after 500ms
+      if (error.status === 500) {
+        // setTimeout(() => {
+        //   this.sendToBackendVenue();
+        // }, 500);
+        alert("request too frequent, please click back button and check the event again");
+      }
+    });
   }
 
   setVenueData(data: any) {
