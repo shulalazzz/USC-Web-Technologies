@@ -65,7 +65,7 @@ export class VenueTabComponent implements OnInit{
         // setTimeout(() => {
         //   this.sendToBackendVenue();
         // }, 500);
-        alert("request too frequent, please click back button and check the event again");
+        alert("request too frequent, please click back button and check the event again, no need to search again");
       }
     });
   }

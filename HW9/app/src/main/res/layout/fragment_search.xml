@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search_fragment"
+    tools:context=".fragments.SearchFragment">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_form"
+        app:cardCornerRadius="40dp"
+        app:cardBackgroundColor="@color/black">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#151515"
+            android:layout_margin="25dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/keyword"
+                android:text="@string/search_form_keyword"
+                android:textColor="@color/text_green"
+                android:textSize="25sp">
+            </TextView>
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:id="@+id/keyword_input"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/light_grey"
+                android:backgroundTint="@color/text_green"
+                android:hint="@string/enter_the_keyword">
+            </AutoCompleteTextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/distance"
+                android:text="@string/search_form_distance"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/text_green"
+                android:textSize="25sp">
+            </TextView>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:id="@+id/distance_input"
+                android:inputType="number"
+                android:text="@string/default_distance"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/text_green"
+                android:autofillHints="distance">
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/category"
+                android:text="@string/search_form_category"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/text_green"
+                android:textSize="25sp">
+            </TextView>
+
+            <Spinner
+                android:id="@+id/category_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:entries="@array/category_array"
+                android:backgroundTint="@color/text_green"
+                android:popupBackground="@color/black"
+                android:layout_marginTop="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/location"
+                    android:text="@string/search_form_location"
+                    android:textColor="@color/text_green"
+                    android:layout_marginTop="10dp"
+                    android:textSize="25sp">
+                </TextView>
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        tools:ignore="NestedWeights" />
+
+                    <Switch
+                        android:id="@+id/location_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/search_form_auto_detect"
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:switchPadding="5dp"
+                        android:paddingEnd="10dp"
+                        android:scaleX="1.2"
+                        android:scaleY="1.2"
+                        tools:ignore="RtlSymmetry,UseSwitchCompatOrMaterialXml" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:id="@+id/location_input"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/light_grey"
+                android:backgroundTint="@color/text_green"
+                android:hint="@string/enter_the_location">
+            </AutoCompleteTextView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/search_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/search_button_txt"
+                    android:textSize="20sp"
+                    app:cornerRadius="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:padding="10dp"
+                    android:textAllCaps="false"
+                    android:backgroundTint="@color/text_green" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/clear_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/clear_button_txt"
+                    android:textSize="20sp"
+                    app:cornerRadius="10dp"
+                    android:layout_marginStart="5dp"
+                    android:padding="10dp"
+                    android:textAllCaps="false"
+                    android:backgroundTint="@color/orange" />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>

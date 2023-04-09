@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">EventFinder</string>
+    <string name="search_tab">SEARCH</string>
+    <string name="favorites_tab">FAVORITES</string>
+    <string name="search_form_keyword">Keyword*</string>
+    <string name="search_form_category">Category*</string>
+    <string name="search_form_location">Location*</string>
+    <string name="search_form_distance">Distance(Miles)*</string>
+    <string name="enter_the_keyword">Enter the Keyword</string>
+    <string name="default_distance">10</string>
+    <string name="search_form_auto_detect">Auto-Detect</string>
+    <string name="enter_the_location">Enter the Location</string>
+    <string name="search_button_txt">Search</string>
+    <string name="clear_button_txt">Clear</string>
+
+
+    <string-array name="category_array">
+        <item>All</item>
+        <item>Music</item>
+        <item>Sports</item>
+        <item>Arts &amp; Theatre</item>
+        <item>Film</item>
+        <item>Miscellaneous</item>
+    </string-array>
+
+</resources>
