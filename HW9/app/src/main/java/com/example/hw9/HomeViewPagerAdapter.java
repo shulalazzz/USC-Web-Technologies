@@ -8,9 +8,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.example.hw9.fragments.FavoritesFragment;
 import com.example.hw9.fragments.SearchFragment;
 
-public class MyViewPagerAdapter extends FragmentStateAdapter {
+public class HomeViewPagerAdapter extends FragmentStateAdapter {
 
-    public MyViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+    public HomeViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
 
