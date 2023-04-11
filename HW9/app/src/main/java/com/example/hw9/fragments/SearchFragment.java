@@ -3,8 +3,11 @@ package com.example.hw9.fragments;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +74,7 @@ public class SearchFragment extends Fragment {
         locationSwitch = view.findViewById(R.id.location_switch);
         locationInput = view.findViewById(R.id.location_input);
         queue = Volley.newRequestQueue(requireContext());
+        restoreForm(getArguments());
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,14 +166,31 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+    public void restoreForm(Bundle passingData) {
+        if (passingData != null) {
+            keywordInput.setText(passingData.getString("keyword"));
+            distanceInput.setText(passingData.getString("distance"));
+            boolean locationSwitchStatus = passingData.getBoolean("locationSwitch");
+            locationSwitch.setChecked(locationSwitchStatus);
+            if (locationSwitchStatus) {
+                locationInput.setVisibility(View.GONE);
+            } else {
+                locationInput.setVisibility(View.VISIBLE);
+            }
+            locationInput.setText(passingData.getString("location"));
+            categoryInput.setSelection(Integer.parseInt(passingData.getString("category")));
+        }
+    }
+
     public void sendToSearchResultFragment(String url) {
-        Bundle result = new Bundle();
-        result.putString("searchUrl", url);
-//        getParentFragmentManager().setFragmentResult("searchUrlResult", result);
-//        System.out.println(url);
-        SearchResultFragment searchResultFragment = new SearchResultFragment();
-        searchResultFragment.setArguments(result);
-        getParentFragmentManager().beginTransaction().replace(R.id.view_pager, searchResultFragment).addToBackStack(null).commit();
+        Bundle outState = new Bundle();
+        outState.putString("searchUrl", url);
+        outState.putString("keyword", keywordInput.getText().toString());
+        outState.putString("distance", distanceInput.getText().toString());
+        outState.putString("category", String.valueOf(categoryInput.getSelectedItemPosition()));
+        outState.putBoolean("locationSwitch", locationSwitch.isChecked());
+        outState.putString("location", locationInput.getText().toString());
+        Navigation.findNavController(view).navigate(R.id.action_searchFragment_to_searchResultFragment, outState);
     }
 
 }

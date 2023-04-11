@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.hw9.fragments.FavoritesFragment;
+import com.example.hw9.fragments.HostSearchFragment;
 import com.example.hw9.fragments.SearchFragment;
 
 public class HomeViewPagerAdapter extends FragmentStateAdapter {
@@ -20,7 +21,7 @@ public class HomeViewPagerAdapter extends FragmentStateAdapter {
         if (position == 1) {
             return new FavoritesFragment();
         }
-        return new SearchFragment();
+        return new HostSearchFragment();
     }
 
     @Override
