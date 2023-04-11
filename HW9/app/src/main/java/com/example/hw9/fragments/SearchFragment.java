@@ -43,13 +43,12 @@ public class SearchFragment extends Fragment {
     Spinner categoryInput;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch locationSwitch;
+    String locationGeo;
     AutoCompleteTextView locationInput;
-    private final String backendSearchUrl = "https://csci-571-hw8-382201.wl.r.appspot.com/search/";
     private final String backendAutoCompleteUrl = "https://csci-571-hw8-382201.wl.r.appspot.com/autocomplete/";
     private final String ipInfoApi = "https://ipinfo.io/json?token=fcee7187512c64";
     RequestQueue queue;
     View view;
-
     static HashMap<String, String> categoryMap = new HashMap<String, String>() {{
         put("All", "Default");
         put("Music", "Music");
@@ -95,9 +94,8 @@ public class SearchFragment extends Fragment {
                             public void onResponse(String response) {
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
-                                    String locationGeo = jsonObject.getString("loc");
-                                    String url = backendSearchUrl + "?keyword=" + keyword + "&category=" + categoryMap.get(category) + "&distance=" + distance + "&location=" + locationGeo;
-                                    sendToSearchResultFragment(url);
+                                    locationGeo = jsonObject.getString("loc");
+                                    sendToSearchResultFragment();
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -121,12 +119,11 @@ public class SearchFragment extends Fragment {
                                         Snackbar.make(view, "Location not found", Snackbar.LENGTH_SHORT).show();
                                         return;
                                     }
-                                    String locationGeo = jsonObject.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").
+                                    locationGeo = jsonObject.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").
                                             getJSONObject("location").getString("lat") + "," +
                                             jsonObject.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").
                                                     getJSONObject("location").getString("lng");
-                                    String url = backendSearchUrl + "?keyword=" + keyword + "&category=" + categoryMap.get(category) + "&distance=" + distance + "&location=" + locationGeo;
-                                    sendToSearchResultFragment(url);
+                                    sendToSearchResultFragment();
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -182,14 +179,23 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    public void sendToSearchResultFragment(String url) {
+    public void sendToSearchResultFragment() throws JSONException {
+        String backendSearchUrl = "https://csci-571-hw8-382201.wl.r.appspot.com/search/";
         Bundle outState = new Bundle();
-        outState.putString("searchUrl", url);
         outState.putString("keyword", keywordInput.getText().toString());
         outState.putString("distance", distanceInput.getText().toString());
         outState.putString("category", String.valueOf(categoryInput.getSelectedItemPosition()));
         outState.putBoolean("locationSwitch", locationSwitch.isChecked());
         outState.putString("location", locationInput.getText().toString());
+
+        JSONObject searchJson = new JSONObject();
+        searchJson.put("keyword", keywordInput.getText().toString());
+        searchJson.put("category", categoryMap.get(categoryInput.getSelectedItem().toString()));
+        searchJson.put("distance", distanceInput.getText().toString());
+        searchJson.put("location", locationGeo);
+        String searchUrl = backendSearchUrl + searchJson;
+        outState.putString("searchUrl", searchUrl);
+
         Navigation.findNavController(view).navigate(R.id.action_searchFragment_to_searchResultFragment, outState);
     }
 

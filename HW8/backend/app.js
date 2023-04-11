@@ -20,7 +20,7 @@ const spotifyApi = new SpotifyWebApi({
 
 let accessToken = '';
 
-app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors({ origin: '*' }));
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
 app.get('/', (req, res) => {
@@ -64,7 +64,7 @@ function preprocessSearchData(data) {
 }
 app.get('/search/:data', async (req, res) => {
     let data = JSON.parse(req.params['data']);
-    // console.log(data);
+    console.log(data);
     let loc = data['location'].split(',');
     let lat = loc[0];
     let lng = loc[1];
