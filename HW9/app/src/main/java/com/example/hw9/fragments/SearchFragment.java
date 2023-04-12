@@ -9,9 +9,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,8 +30,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hw9.HomeActivity;
 import com.example.hw9.R;
+import com.example.hw9.modules.SuggestionsAdapter;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,19 +42,22 @@ import java.util.Objects;
 
 public class SearchFragment extends Fragment {
 
-    Button searchButton;
-    Button clearButton;
-    AutoCompleteTextView keywordInput;
-    EditText distanceInput;
-    Spinner categoryInput;
+    private AutoCompleteTextView keywordInput;
+    private EditText distanceInput;
+    private Spinner categoryInput;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    Switch locationSwitch;
-    String locationGeo;
-    AutoCompleteTextView locationInput;
+    private Switch locationSwitch;
+    private String locationGeo;
+    private AutoCompleteTextView locationInput;
     private final String backendAutoCompleteUrl = "https://csci-571-hw8-382201.wl.r.appspot.com/autocomplete/";
     private final String ipInfoApi = "https://ipinfo.io/json?token=fcee7187512c64";
-    RequestQueue queue;
+    private RequestQueue queue;
     View view;
+    // The array that contains the suggestions
+    ArrayAdapter<String> autoCompleteAdapter;
+    private Handler autocompleteDelayHandler = new Handler();
+    private Runnable runnable;
+
     static HashMap<String, String> categoryMap = new HashMap<String, String>() {{
         put("All", "Default");
         put("Music", "Music");
@@ -65,13 +74,13 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        searchButton = view.findViewById(R.id.search_button);
-        clearButton = view.findViewById(R.id.clear_button);
-        keywordInput = view.findViewById(R.id.keyword_input);
+        Button searchButton = view.findViewById(R.id.search_button);
+        Button clearButton = view.findViewById(R.id.clear_button);
         distanceInput = view.findViewById(R.id.distance_input);
         categoryInput = view.findViewById(R.id.category_spinner);
         locationSwitch = view.findViewById(R.id.location_switch);
         locationInput = view.findViewById(R.id.location_input);
+        initAutoComplete();
         queue = Volley.newRequestQueue(requireContext());
         restoreForm(getArguments());
 
@@ -79,8 +88,6 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String keyword = keywordInput.getText().toString();
-                int distance = distanceInput.getText().toString().isEmpty() ? 10 : Integer.parseInt(distanceInput.getText().toString());
-                String category = categoryInput.getSelectedItem().toString();
                 String location = locationInput.getText().toString();
                 boolean locationSwitchStatus = locationSwitch.isChecked();
                 if (keyword.isEmpty()) {
@@ -163,7 +170,7 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    public void restoreForm(Bundle passingData) {
+    private void restoreForm(Bundle passingData) {
         if (passingData != null) {
             keywordInput.setText(passingData.getString("keyword"));
             distanceInput.setText(passingData.getString("distance"));
@@ -179,7 +186,7 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    public void sendToSearchResultFragment() throws JSONException {
+    private void sendToSearchResultFragment() throws JSONException {
         String backendSearchUrl = "https://csci-571-hw8-382201.wl.r.appspot.com/search/";
         Bundle outState = new Bundle();
         outState.putString("keyword", keywordInput.getText().toString());
@@ -197,6 +204,70 @@ public class SearchFragment extends Fragment {
         outState.putString("searchUrl", searchUrl);
 
         Navigation.findNavController(view).navigate(R.id.action_searchFragment_to_searchResultFragment, outState);
+    }
+
+    private void initAutoComplete() {
+        keywordInput = view.findViewById(R.id.keyword_input);
+        autoCompleteAdapter = new SuggestionsAdapter(requireContext(), android.R.layout.simple_list_item_1);
+        keywordInput.setAdapter(autoCompleteAdapter);
+        keywordInput.setThreshold(0);
+        keywordInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    String autoCompleteUrl = backendAutoCompleteUrl + s;
+                    autocompleteDelayHandler.removeCallbacks(runnable);
+                    runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            sendAutoCompleteAndUpdateAdapter(autoCompleteUrl);
+                        }
+                    };
+                    autocompleteDelayHandler.postDelayed(runnable, 500);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+    }
+
+    private void sendAutoCompleteAndUpdateAdapter(String autoCompleteUrl) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, autoCompleteUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+//                System.out.println(response);
+                if (response.equals("null")) {
+                    autoCompleteAdapter.clear();
+                    autoCompleteAdapter.notifyDataSetChanged();
+                    return;
+                }
+                try {
+                    JSONArray suggestions = new JSONArray(response);
+                    autoCompleteAdapter.clear();
+                    for (int i = 0; i < suggestions.length(); i++) {
+                        autoCompleteAdapter.add(suggestions.getString(i));
+                    }
+                    autoCompleteAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Snackbar.make(view, "Error: " + error.getMessage(), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+        queue.add(stringRequest);
     }
 
 }
