@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 
@@ -49,6 +50,7 @@ public class SearchFragment extends Fragment {
     private Switch locationSwitch;
     private String locationGeo;
     private AutoCompleteTextView locationInput;
+    private ProgressBar autoCompleteProgressBar;
     private final String backendAutoCompleteUrl = "https://csci-571-hw8-382201.wl.r.appspot.com/autocomplete/";
     private final String ipInfoApi = "https://ipinfo.io/json?token=fcee7187512c64";
     private RequestQueue queue;
@@ -80,6 +82,7 @@ public class SearchFragment extends Fragment {
         categoryInput = view.findViewById(R.id.category_spinner);
         locationSwitch = view.findViewById(R.id.location_switch);
         locationInput = view.findViewById(R.id.location_input);
+        autoCompleteProgressBar = view.findViewById(R.id.autocomplete_progress_bar);
         initAutoComplete();
         queue = Volley.newRequestQueue(requireContext());
         restoreForm(getArguments());
@@ -222,6 +225,7 @@ public class SearchFragment extends Fragment {
                 if (s.length() > 0) {
                     String autoCompleteUrl = backendAutoCompleteUrl + s;
                     autocompleteDelayHandler.removeCallbacks(runnable);
+                    autoCompleteProgressBar.setVisibility(View.VISIBLE);
                     runnable = new Runnable() {
                         @Override
                         public void run() {
@@ -245,9 +249,10 @@ public class SearchFragment extends Fragment {
             @Override
             public void onResponse(String response) {
 //                System.out.println(response);
-                if (response.equals("null")) {
+                if (response == null || response.trim().equals("") || response.equals("null")) {
                     autoCompleteAdapter.clear();
                     autoCompleteAdapter.notifyDataSetChanged();
+                    autoCompleteProgressBar.setVisibility(View.GONE);
                     return;
                 }
                 try {
@@ -260,10 +265,12 @@ public class SearchFragment extends Fragment {
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
+                autoCompleteProgressBar.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                autoCompleteProgressBar.setVisibility(View.GONE);
                 Snackbar.make(view, "Error: " + error.getMessage(), Snackbar.LENGTH_SHORT).show();
             }
         });

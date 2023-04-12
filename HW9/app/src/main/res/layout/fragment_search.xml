@@ -34,16 +34,30 @@
                 android:textSize="25sp">
             </TextView>
 
-            <AutoCompleteTextView
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="50sp"
-                android:id="@+id/keyword_input"
-                android:layout_marginTop="10dp"
-                android:textColorHint="@color/light_grey"
-                android:backgroundTint="@color/text_green"
-                android:popupBackground="@color/black"
-                android:hint="@string/enter_the_keyword">
-            </AutoCompleteTextView>
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50sp"
+                    android:id="@+id/keyword_input"
+                    android:layout_marginTop="10dp"
+                    android:textColorHint="@color/light_grey"
+                    android:backgroundTint="@color/text_green"
+                    android:popupBackground="#151515"
+                    android:hint="@string/enter_the_keyword">
+                </AutoCompleteTextView>
+
+                <ProgressBar
+                    android:id="@+id/autocomplete_progress_bar"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone"
+                    android:layout_gravity="end" />
+
+            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
