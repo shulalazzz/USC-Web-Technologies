@@ -25,5 +25,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="back_to_search">Back to Search</string>
+    <string name="no_events_found">No events found</string>
+    <string name="back_button">back_button</string>
 
 </resources>

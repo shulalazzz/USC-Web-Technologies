@@ -2,12 +2,13 @@ package com.example.hw9.modules;
 
 import android.annotation.SuppressLint;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class EventItem {
+public class EventItem implements Serializable {
     String eventName;
     String venueName;
     String dateTime;

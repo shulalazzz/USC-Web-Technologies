@@ -1,5 +1,6 @@
 package com.example.hw9.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.hw9.EventDetailActivity;
 import com.example.hw9.R;
 import com.example.hw9.modules.EventItem;
 import com.example.hw9.modules.EventItemViewAdapter;
@@ -34,11 +37,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchResultFragment extends Fragment {
+public class SearchResultFragment extends Fragment implements EventItemViewAdapter.OnEventListener {
 
     View view;
     RequestQueue queue;
     RelativeLayout progressBarContainer;
+    RelativeLayout noResultContainer;
     RecyclerView searchResultRecyclerView;
     Bundle passingData;
     String searchUrl;
@@ -48,18 +52,25 @@ public class SearchResultFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         view = inflater.inflate(R.layout.fragment_search_result, container, false);
+
+        initFragment();
+        sendToBackendSearch();
+
+        return view;
+    }
+
+    public void initFragment() {
         progressBarContainer = view.findViewById(R.id.search_result_progress_bar_container);
+        noResultContainer = view.findViewById(R.id.no_result_container);
         searchResultRecyclerView = view.findViewById(R.id.search_result_recycler_view);
         queue = Volley.newRequestQueue(requireContext());
-        if (getArguments() == null) {
-            return view;
+        if (getArguments() != null) {
+            passingData = getArguments();
+            searchUrl = passingData.getString("searchUrl");
+            System.out.println(searchUrl);
         }
-        passingData = getArguments();
-        searchUrl = passingData.getString("searchUrl");
-        System.out.println(searchUrl);
-
         LinearLayout searchResultHeader = view.findViewById(R.id.search_result_header);
         searchResultHeader.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,11 +78,6 @@ public class SearchResultFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_searchResultFragment_to_searchFragment, passingData);
             }
         });
-
-        sendToBackendSearch();
-
-
-        return view;
     }
 
     public void sendToBackendSearch() {
@@ -80,7 +86,9 @@ public class SearchResultFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         System.out.println(response);
+                        progressBarContainer.setVisibility(View.GONE);
                         if (response == null || response.trim().equals("") || response.equals("null")) {
+                            displayNoResult();
                             return;
                         }
                         try {
@@ -96,9 +104,9 @@ public class SearchResultFragment extends Fragment {
                                 EventItem eventItem = new EventItem(eventName, venue, dates, imgUrl, id, genre);
                                 eventItems.add(eventItem);
                             }
-                            progressBarContainer.setVisibility(View.GONE);
                             displaySearchResult();
                         } catch (JSONException e) {
+                            displayNoResult();
                             e.printStackTrace();
                         }
                     }
@@ -111,11 +119,23 @@ public class SearchResultFragment extends Fragment {
         queue.add(stringRequest);
     }
 
+    public void displayNoResult() {
+        searchResultRecyclerView.setVisibility(View.GONE);
+        noResultContainer.setVisibility(View.VISIBLE);
+    }
+
     public void displaySearchResult() {
         searchResultRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        eventItemViewAdapter = new EventItemViewAdapter(requireContext(), eventItems);
+        eventItemViewAdapter = new EventItemViewAdapter(requireContext(), eventItems, this);
         searchResultRecyclerView.setAdapter(eventItemViewAdapter);
     }
 
 
+    @Override
+    public void onEventClick(int position) {
+        Intent intent = new Intent(requireContext(), EventDetailActivity.class);
+        Log.d("SearchResultFragment", eventItems.get(position).getId() + " " + eventItems.get(position).getEventName());
+        intent.putExtra("eventItem", eventItems.get(position));
+        startActivity(intent);
+    }
 }

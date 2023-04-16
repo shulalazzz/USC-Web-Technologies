@@ -24,13 +24,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void initActivity() {
-//        ActionBar actionBar = getSupportActionBar();
-//        if (actionBar != null) {
-//            actionBar.setTitle(Html.fromHtml("<font color=\"" + getResources().getColor(R.color.text_green) + "\">" + getString(R.string.app_name) + "</font>"));
-//        }
-
-        tabLayout = findViewById(R.id.tab_layout);
-        viewPager2 = findViewById(R.id.view_pager);
+        tabLayout = findViewById(R.id.home_tab_layout);
+        viewPager2 = findViewById(R.id.home_view_pager);
         homeViewPagerAdapter = new HomeViewPagerAdapter(this);
         viewPager2.setAdapter(homeViewPagerAdapter);
 

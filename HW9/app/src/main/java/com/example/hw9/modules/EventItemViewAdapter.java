@@ -20,8 +20,11 @@ public class EventItemViewAdapter extends RecyclerView.Adapter<EventItemViewAdap
     Context context;
     List<EventItem> eventItems;
     View view;
+    OnEventListener mOnEventListener;
 
-    public static class EventItemViewHolder extends RecyclerView.ViewHolder {
+
+    // ViewHolder
+    public static class EventItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView eventImageView;
         TextView eventNameView;
@@ -30,8 +33,10 @@ public class EventItemViewAdapter extends RecyclerView.Adapter<EventItemViewAdap
         TextView eventDateView;
         TextView eventTimeView;
         ImageView heartIconView;
+        boolean heartClicked;
+        OnEventListener onEventListener;
 
-        public EventItemViewHolder(@NonNull View itemView) {
+        public EventItemViewHolder(@NonNull View itemView, OnEventListener onEventListener) {
             super(itemView);
             eventImageView = itemView.findViewById(R.id.event_image);
             eventNameView = itemView.findViewById(R.id.event_name);
@@ -40,13 +45,30 @@ public class EventItemViewAdapter extends RecyclerView.Adapter<EventItemViewAdap
             eventDateView = itemView.findViewById(R.id.event_date);
             eventTimeView = itemView.findViewById(R.id.event_time);
             heartIconView = itemView.findViewById(R.id.heart_icon);
+            heartClicked = false;
+            this.onEventListener = onEventListener;
+            itemView.setOnClickListener(this);
+        }
 
+        @Override
+        public void onClick(View view) {
+            onEventListener.onEventClick(getAdapterPosition());
         }
     }
 
-    public EventItemViewAdapter(Context context, List<EventItem> eventItems) {
+    // Interface
+    public interface OnEventListener {
+        void onEventClick(int position);
+    }
+
+
+
+
+
+    public EventItemViewAdapter(Context context, List<EventItem> eventItems, OnEventListener onEventListener) {
         this.context = context;
         this.eventItems = eventItems;
+        this.mOnEventListener = onEventListener;
     }
 
 
@@ -54,7 +76,7 @@ public class EventItemViewAdapter extends RecyclerView.Adapter<EventItemViewAdap
     @Override
     public EventItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         view = LayoutInflater.from(context).inflate(R.layout.event_item, parent, false);
-        return new EventItemViewHolder(view);
+        return new EventItemViewHolder(view, mOnEventListener);
     }
 
     @Override
@@ -82,7 +104,19 @@ public class EventItemViewAdapter extends RecyclerView.Adapter<EventItemViewAdap
         });
         holder.eventDateView.setText(eventItems.get(position).getDate());
         holder.eventTimeView.setText(eventItems.get(position).getTime());
-        Glide.with(context).load(eventItems.get(position).getImgUrl()).centerCrop().into(holder.eventImageView);
+        Glide.with(context).load(eventItems.get(position).getImgUrl()).into(holder.eventImageView);
+        holder.heartIconView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("heart clicked");
+                holder.heartClicked = !holder.heartClicked;
+                if (holder.heartClicked) {
+                    holder.heartIconView.setImageResource(R.mipmap.ic_heart_filled_foreground);
+                } else {
+                    holder.heartIconView.setImageResource(R.mipmap.ic_heart_outline_foreground);
+                }
+            }
+        });
     }
 
     @Override
