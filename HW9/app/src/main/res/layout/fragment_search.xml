@@ -5,10 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search_fragment"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
-    android:layout_marginTop="30dp"
-    android:layout_marginBottom="30dp"
     tools:context=".fragments.SearchFragment">
 
 
@@ -17,6 +13,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/search_form"
         app:cardCornerRadius="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         app:cardBackgroundColor="@color/black">
 
         <LinearLayout

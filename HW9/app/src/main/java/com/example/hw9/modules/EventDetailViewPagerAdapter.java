@@ -11,7 +11,12 @@ import com.example.hw9.fragments.EventDetailArtistFragment;
 import com.example.hw9.fragments.EventDetailDetailsFragment;
 import com.example.hw9.fragments.EventDetailVenueFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EventDetailViewPagerAdapter extends FragmentStateAdapter {
+
+    List<Fragment> mFragmentList = new ArrayList<>();
     public EventDetailViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
@@ -27,17 +32,15 @@ public class EventDetailViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        if (position == 1) {
-            return new EventDetailDetailsFragment();
-        }
-        else if (position == 2) {
-            return new EventDetailArtistFragment();
-        }
-        return new EventDetailVenueFragment();
+        return mFragmentList.get(position);
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return mFragmentList.size();
+    }
+
+    public void addFragment(Fragment fragment) {
+        mFragmentList.add(fragment);
     }
 }

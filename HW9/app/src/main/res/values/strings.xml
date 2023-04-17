@@ -27,5 +27,13 @@
     <string name="back_to_search">Back to Search</string>
     <string name="no_events_found">No events found</string>
     <string name="back_button">back_button</string>
+    <string name="artist_teams">Artist/Teams</string>
+    <string name="venue">Venue</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="genres">Genres</string>
+    <string name="price_range">Price Range</string>
+    <string name="ticket_status">Ticket Status</string>
+    <string name="buy_tickets_at">Buy Tickets At</string>
 
 </resources>
