@@ -22,7 +22,6 @@ import org.json.JSONObject;
 public class EventDetailDetailsFragment extends Fragment {
 
     View view;
-    JSONObject eventObject;
     Bundle bundle;
 
 

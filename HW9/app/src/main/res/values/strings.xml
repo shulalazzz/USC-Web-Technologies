@@ -37,5 +37,12 @@
     <string name="buy_tickets_at">Buy Tickets At</string>
     <string name="artist_music_data_unavailable">Artist/Music data unavailable</string>
     <string name="check_out_on_spotify">Check out on Spotify</string>
+    <string name="name">Name</string>
+    <string name="address">Address</string>
+    <string name="city_state">City/State</string>
+    <string name="contact_info">Contact Info</string>
+    <string name="open_hours">Open Hours</string>
+    <string name="child_rules">Child Rules</string>
+    <string name="general_rules">General Rules</string>
 
 </resources>
