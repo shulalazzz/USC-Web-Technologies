@@ -85,7 +85,7 @@ public class SearchResultFragment extends Fragment implements EventItemViewAdapt
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println(response);
+//                        System.out.println(response);
                         progressBarContainer.setVisibility(View.GONE);
                         if (response == null || response.trim().equals("") || response.equals("null")) {
                             displayNoResult();

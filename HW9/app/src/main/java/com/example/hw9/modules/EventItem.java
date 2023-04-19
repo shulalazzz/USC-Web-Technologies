@@ -45,7 +45,7 @@ public class EventItem implements Serializable {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        System.out.println("date: " + this.date + " time: " + this.time);
+//        System.out.println("date: " + this.date + " time: " + this.time);
 
     }
 

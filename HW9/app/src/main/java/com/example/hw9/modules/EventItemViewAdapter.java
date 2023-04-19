@@ -108,7 +108,7 @@ public class EventItemViewAdapter extends RecyclerView.Adapter<EventItemViewAdap
         holder.heartIconView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("heart clicked");
+//                System.out.println("heart clicked");
                 holder.heartClicked = !holder.heartClicked;
                 if (holder.heartClicked) {
                     holder.heartIconView.setImageResource(R.mipmap.ic_heart_filled_foreground);

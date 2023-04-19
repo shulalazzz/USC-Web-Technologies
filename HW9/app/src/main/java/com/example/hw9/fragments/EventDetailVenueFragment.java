@@ -18,7 +18,7 @@ public class EventDetailVenueFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_event_detail_venue_b, container, false);
+        view = inflater.inflate(R.layout.fragment_event_detail_venue, container, false);
         return view;
     }
 }

@@ -1,11 +1,15 @@
 package com.example.hw9;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.hw9.fragments.EventDetailArtistFragment;
 import com.example.hw9.fragments.EventDetailDetailsFragment;
 import com.example.hw9.fragments.EventDetailVenueFragment;
@@ -26,10 +31,15 @@ import com.example.hw9.modules.EventItem;
 import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class EventDetailActivity extends AppCompatActivity {
@@ -43,10 +53,15 @@ public class EventDetailActivity extends AppCompatActivity {
     JSONObject eventObject;
     String eventString;
     String backendEventDetailUrl = "https://csci-571-hw8-382201.wl.r.appspot.com/event/";
-    List<String> artistNames = new ArrayList<>();
-    String venueName;
+    Bundle detailsBundle = new Bundle();
+    Bundle artistBundle = new Bundle();
+    Bundle venueBundle = new Bundle();
     RelativeLayout progressBarContainer;
     LinearLayout eventDetailContainer;
+    ImageView facebookIcon;
+    String facebookLink;
+    ImageView twitterIcon;
+    String twitterLink;
     int[] tabIcons = {
             R.drawable.info_icon,
             R.drawable.artist_icon,
@@ -63,47 +78,100 @@ public class EventDetailActivity extends AppCompatActivity {
     }
 
     public void processResponseData() {
-        try {
-            // get artist names
-            if (this.eventObject.has("_embedded") && this.eventObject.getJSONObject("_embedded").has("attractions")) {
-                JSONArray attractions = this.eventObject.getJSONObject("_embedded").getJSONArray("attractions");
-                for (int i = 0; i < attractions.length(); i++) {
-                    JSONObject attraction = attractions.getJSONObject(i);
-                    if (attraction.has("classifications") && attraction.getJSONArray("classifications").length() > 0) {
-                        JSONObject classification = attraction.getJSONArray("classifications").getJSONObject(0);
-                        if (classification.has("segment") && classification.getJSONObject("segment").has("name")
-                                && classification.getJSONObject("segment").getString("name").contains("Music")) {
-                            this.artistNames.add(attraction.optString("name", ""));
+        if (this.eventObject != null) {
+            try {
+                if (this.eventObject.has("dates")) {
+                    if (this.eventObject.getJSONObject("dates").has("start") && this.eventObject.getJSONObject("dates").getJSONObject("start").has("localDate")) {
+                        String dateString = this.eventObject.getJSONObject("dates").getJSONObject("start").getString("localDate");
+                        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                        DateFormat outputFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);
+                        String outputDate = outputFormat.format(Objects.requireNonNull(inputFormat.parse(dateString)));
+                        detailsBundle.putString("date", outputDate);
+                        if (eventObject.getJSONObject("dates").getJSONObject("start").has("localTime")) {
+                            String time = this.eventObject.getJSONObject("dates").getJSONObject("start").getString("localTime");
+                            @SuppressLint("SimpleDateFormat") SimpleDateFormat inputFormatTime = new SimpleDateFormat("HH:mm:ss");
+                            @SuppressLint("SimpleDateFormat") SimpleDateFormat outputFormatTime = new SimpleDateFormat("h:mm a");
+                            String outputTime = outputFormatTime.format(Objects.requireNonNull(inputFormatTime.parse(time)));
+                            detailsBundle.putString("time", outputTime);
+                        }
+                        if (this.eventObject.getJSONObject("dates").has("status")) {
+                            String status = this.eventObject.getJSONObject("dates").getJSONObject("status").getString("code");
+                            detailsBundle.putString("status", status);
                         }
                     }
                 }
-            }
-            // get venue name
-            if (this.eventObject.has("_embedded") && this.eventObject.getJSONObject("_embedded").has("venues")) {
-                JSONArray venues = this.eventObject.getJSONObject("_embedded").getJSONArray("venues");
-                if (venues.length() > 0) {
-                    JSONObject venue = venues.getJSONObject(0);
-                    this.venueName = venue.optString("name", "");
+                if (this.eventObject.has("_embedded") && this.eventObject.getJSONObject("_embedded").has("venues")) {
+                    String venueName = this.eventObject.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getString("name");
+                    detailsBundle.putString("venueName", venueName);
+                    venueBundle.putString("venueName", venueName);
                 }
+                if (this.eventObject.has("priceRanges")) {
+                    String minPrice = this.eventObject.getJSONArray("priceRanges").getJSONObject(0).getString("min");
+                    String maxPrice = this.eventObject.getJSONArray("priceRanges").getJSONObject(0).getString("max");
+                    String currency = this.eventObject.getJSONArray("priceRanges").getJSONObject(0).getString("currency");
+                    detailsBundle.putString("priceRanges", String.format("%s - %s (%s)", minPrice, maxPrice, currency));
+                }
+                if (this.eventObject.has("url")) {
+                    String url = this.eventObject.getString("url");
+                    detailsBundle.putString("url", url);
+                    facebookLink = String.format("https://www.facebook.com/sharer/sharer.php?u=%s&amp;src=sdkpreparse", url);
+                    twitterLink = String.format("https://twitter.com/intent/tweet?text=Check out %s on Ticketmaster! %s&hashtags=hashtag1,hashtag2", this.eventObject.getString("name"), url);
+                }
+                if (this.eventObject.has("seatmap")) {
+                    String seatmap = this.eventObject.getJSONObject("seatmap").getString("staticUrl");
+                    detailsBundle.putString("seatmap", seatmap);
+                }
+                if (this.eventObject.has("classifications")) {
+                    List<String> genres = new ArrayList<>();
+                    JSONObject classifications = this.eventObject.getJSONArray("classifications").getJSONObject(0);
+                    if (classifications.has("segment") && classifications.getJSONObject("segment").has("name") && !classifications.getJSONObject("segment").getString("name").equals("Undefined")) {
+                        genres.add(classifications.getJSONObject("segment").getString("name"));
+                    }
+                    if (classifications.has("genre") && classifications.getJSONObject("genre").has("name") && !classifications.getJSONObject("genre").getString("name").equals("Undefined")) {
+                        genres.add(classifications.getJSONObject("genre").getString("name"));
+                    }
+                    if (classifications.has("subGenre") && classifications.getJSONObject("subGenre").has("name") && !classifications.getJSONObject("subGenre").getString("name").equals("Undefined")) {
+                        genres.add(classifications.getJSONObject("subGenre").getString("name"));
+                    }
+                    if (classifications.has("type") && classifications.getJSONObject("type").has("name") && !classifications.getJSONObject("type").getString("name").equals("Undefined")) {
+                        genres.add(classifications.getJSONObject("type").getString("name"));
+                    }
+                    if (classifications.has("subType") && classifications.getJSONObject("subType").has("name") && !classifications.getJSONObject("subType").getString("name").equals("Undefined")) {
+                        genres.add(classifications.getJSONObject("subType").getString("name"));
+                    }
+                    String genreString = String.join(" | ", genres);
+                    detailsBundle.putString("genres", genreString);
+                }
+                if (this.eventObject.has("_embedded") && this.eventObject.getJSONObject("_embedded").has("attractions")) {
+                    JSONArray attractions = this.eventObject.getJSONObject("_embedded").getJSONArray("attractions");
+                    ArrayList<String> artists = new ArrayList<>();
+                    for (int i = 0; i < attractions.length(); i++) {
+                        if (attractions.getJSONObject(i).has("classifications") && attractions.getJSONObject(i).getJSONArray("classifications").getJSONObject(0)
+                                .has("segment") && attractions.getJSONObject(i).getJSONArray("classifications").getJSONObject(0).getJSONObject("segment")
+                                .has("name") && attractions.getJSONObject(i).getJSONArray("classifications").getJSONObject(0).getJSONObject("segment")
+                                .getString("name").contains("Music")) {
+                            artists.add(attractions.getJSONObject(i).getString("name"));
+                        }
+                    }
+                    artistBundle.putStringArrayList("artistNames", artists);
+                    String artistString = String.join(" | ", artists);
+                    detailsBundle.putString("artists", artistString);
+                }
+                sendDataToFragments();
             }
-            sendDataToFragments();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+            catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
 
     @SuppressLint("NotifyDataSetChanged")
     public void sendDataToFragments() {
-        Bundle detailsBundle = new Bundle();
-        detailsBundle.putString("eventString", this.eventString);
         this.eventDetailDetailsFragment.setArguments(detailsBundle);
-        Bundle artistBundle = new Bundle();
-        artistBundle.putStringArrayList("artistNames", (ArrayList<String>) this.artistNames);
         this.eventDetailArtistFragment.setArguments(artistBundle);
-        Bundle venueBundle = new Bundle();
-        venueBundle.putString("venueName", this.venueName);
         this.eventDetailVenueFragment.setArguments(venueBundle);
         eventDetailViewPagerAdapter.notifyDataSetChanged();
     }
@@ -144,6 +212,24 @@ public class EventDetailActivity extends AppCompatActivity {
         ImageView heartIcon = findViewById(R.id.heart_icon);
         progressBarContainer = findViewById(R.id.event_detail_progress_bar_container);
         eventDetailContainer = findViewById(R.id.event_detail_container);
+        facebookIcon = findViewById(R.id.facebook_icon);
+        twitterIcon = findViewById(R.id.twitter_icon);
+
+        facebookIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookLink));
+                startActivity(intent);
+            }
+        });
+
+        twitterIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(twitterLink));
+                startActivity(intent);
+            }
+        });
 
         heartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,6 +263,7 @@ public class EventDetailActivity extends AppCompatActivity {
         eventDetailViewPagerAdapter.addFragment(eventDetailArtistFragment);
         eventDetailViewPagerAdapter.addFragment(eventDetailVenueFragment);
         viewPager2.setAdapter(eventDetailViewPagerAdapter);
+        viewPager2.setOffscreenPageLimit(2);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

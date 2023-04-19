@@ -35,5 +35,7 @@
     <string name="price_range">Price Range</string>
     <string name="ticket_status">Ticket Status</string>
     <string name="buy_tickets_at">Buy Tickets At</string>
+    <string name="artist_music_data_unavailable">Artist/Music data unavailable</string>
+    <string name="check_out_on_spotify">Check out on Spotify</string>
 
 </resources>
