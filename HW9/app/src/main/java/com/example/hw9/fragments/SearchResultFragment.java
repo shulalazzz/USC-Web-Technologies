@@ -1,5 +1,6 @@
 package com.example.hw9.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -138,4 +139,14 @@ public class SearchResultFragment extends Fragment implements EventItemViewAdapt
         intent.putExtra("eventItem", eventItems.get(position));
         startActivity(intent);
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(eventItemViewAdapter != null)
+            eventItemViewAdapter.notifyDataSetChanged();
+    }
+
+
 }

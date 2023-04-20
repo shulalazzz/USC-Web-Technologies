@@ -6,7 +6,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -28,7 +30,9 @@ import com.example.hw9.fragments.EventDetailDetailsFragment;
 import com.example.hw9.fragments.EventDetailVenueFragment;
 import com.example.hw9.modules.EventDetailViewPagerAdapter;
 import com.example.hw9.modules.EventItem;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,7 +55,6 @@ public class EventDetailActivity extends AppCompatActivity {
     EventDetailVenueFragment eventDetailVenueFragment;
     EventDetailViewPagerAdapter eventDetailViewPagerAdapter;
     JSONObject eventObject;
-    String eventString;
     String backendEventDetailUrl = "https://csci-571-hw8-382201.wl.r.appspot.com/event/";
     Bundle detailsBundle = new Bundle();
     Bundle artistBundle = new Bundle();
@@ -67,6 +70,9 @@ public class EventDetailActivity extends AppCompatActivity {
             R.drawable.artist_icon,
             R.drawable.venue_icon
     };
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    Gson gson = new Gson();
 
 
     @Override
@@ -145,15 +151,17 @@ public class EventDetailActivity extends AppCompatActivity {
                 if (this.eventObject.has("_embedded") && this.eventObject.getJSONObject("_embedded").has("attractions")) {
                     JSONArray attractions = this.eventObject.getJSONObject("_embedded").getJSONArray("attractions");
                     ArrayList<String> artists = new ArrayList<>();
+                    ArrayList<String> musicArtists = new ArrayList<>();
                     for (int i = 0; i < attractions.length(); i++) {
                         if (attractions.getJSONObject(i).has("classifications") && attractions.getJSONObject(i).getJSONArray("classifications").getJSONObject(0)
                                 .has("segment") && attractions.getJSONObject(i).getJSONArray("classifications").getJSONObject(0).getJSONObject("segment")
                                 .has("name") && attractions.getJSONObject(i).getJSONArray("classifications").getJSONObject(0).getJSONObject("segment")
                                 .getString("name").contains("Music")) {
-                            artists.add(attractions.getJSONObject(i).getString("name"));
+                            musicArtists.add(attractions.getJSONObject(i).getString("name"));
                         }
+                        artists.add(attractions.getJSONObject(i).getString("name"));
                     }
-                    artistBundle.putStringArrayList("artistNames", artists);
+                    artistBundle.putStringArrayList("artistNames", musicArtists);
                     String artistString = String.join(" | ", artists);
                     detailsBundle.putString("artists", artistString);
                 }
@@ -183,7 +191,6 @@ public class EventDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    eventString = response;
                     eventObject = new JSONObject(response);
 //                    System.out.println(eventObject);
                     processResponseData();
@@ -214,7 +221,15 @@ public class EventDetailActivity extends AppCompatActivity {
         eventDetailContainer = findViewById(R.id.event_detail_container);
         facebookIcon = findViewById(R.id.facebook_icon);
         twitterIcon = findViewById(R.id.twitter_icon);
+        sharedPreferences = getSharedPreferences("eventPreference", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
+        if (sharedPreferences.contains(eventItem.getId())) {
+            heartIcon.setImageResource(R.mipmap.ic_heart_filled_foreground);
+        }
+        else {
+            heartIcon.setImageResource(R.mipmap.ic_heart_outline_foreground);
+        }
         facebookIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -234,7 +249,19 @@ public class EventDetailActivity extends AppCompatActivity {
         heartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: add to favorite
+                if (sharedPreferences.contains(eventItem.getId())) {
+                    heartIcon.setImageResource(R.mipmap.ic_heart_outline_foreground);
+                    editor.remove(eventItem.getId());
+                    editor.apply();
+                    Snackbar.make(view, eventItem.getEventName() + " removed from favorites", Snackbar.LENGTH_SHORT).show();
+                }
+                else {
+                    heartIcon.setImageResource(R.mipmap.ic_heart_filled_foreground);
+                    String eventString = gson.toJson(eventItem);
+                    editor.putString(eventItem.getId(), eventString);
+                    editor.apply();
+                    Snackbar.make(view, eventItem.getEventName() + " added to favorites", Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
 

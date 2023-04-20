@@ -1,10 +1,13 @@
 package com.example.hw9.modules;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.hw9.R;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -21,6 +26,9 @@ public class EventItemViewAdapter extends RecyclerView.Adapter<EventItemViewAdap
     List<EventItem> eventItems;
     View view;
     OnEventListener mOnEventListener;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    Gson gson;
 
 
     // ViewHolder
@@ -69,6 +77,9 @@ public class EventItemViewAdapter extends RecyclerView.Adapter<EventItemViewAdap
         this.context = context;
         this.eventItems = eventItems;
         this.mOnEventListener = onEventListener;
+        this.sharedPreferences = context.getSharedPreferences("eventPreference", Context.MODE_PRIVATE);
+        this.editor = sharedPreferences.edit();
+        this.gson = new Gson();
     }
 
 
@@ -80,7 +91,7 @@ public class EventItemViewAdapter extends RecyclerView.Adapter<EventItemViewAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EventItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull EventItemViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.eventNameView.setText(eventItems.get(position).getEventName());
         holder.eventNameView.post(new Runnable() {
             @Override
@@ -105,15 +116,31 @@ public class EventItemViewAdapter extends RecyclerView.Adapter<EventItemViewAdap
         holder.eventDateView.setText(eventItems.get(position).getDate());
         holder.eventTimeView.setText(eventItems.get(position).getTime());
         Glide.with(context).load(eventItems.get(position).getImgUrl()).into(holder.eventImageView);
+        String eventID = eventItems.get(position).getId();
+        if (this.sharedPreferences.contains(eventID)) {
+            holder.heartIconView.setImageResource(R.mipmap.ic_heart_filled_foreground);
+            holder.heartClicked = true;
+        } else {
+            holder.heartIconView.setImageResource(R.mipmap.ic_heart_outline_foreground);
+            holder.heartClicked = false;
+        }
         holder.heartIconView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                System.out.println("heart clicked");
                 holder.heartClicked = !holder.heartClicked;
+                String eventName = eventItems.get(position).getEventName();
                 if (holder.heartClicked) {
                     holder.heartIconView.setImageResource(R.mipmap.ic_heart_filled_foreground);
+                    String eventJson = gson.toJson(eventItems.get(position));
+                    editor.putString(eventID, eventJson);
+                    editor.apply();
+                    Snackbar.make(view, eventName + " added to favorites", Snackbar.LENGTH_SHORT).show();
                 } else {
                     holder.heartIconView.setImageResource(R.mipmap.ic_heart_outline_foreground);
+                    editor.remove(eventID);
+                    editor.apply();
+                    Snackbar.make(view, eventName + " removed from favorites", Snackbar.LENGTH_SHORT).show();
                 }
             }
         });
