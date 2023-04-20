@@ -2,6 +2,7 @@ package com.example.hw9.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -17,6 +18,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hw9.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,12 +33,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-public class EventDetailVenueFragment extends Fragment {
+public class EventDetailVenueFragment extends Fragment implements OnMapReadyCallback {
 
     View view;
     Bundle bundle;
     String backendVenueUrl = "https://csci-571-hw8-382201.wl.r.appspot.com/venue/";
     RequestQueue queue;
+    GoogleMap googleMap;
+    LatLng venueLatLng;
+    int noteCardMissing = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +61,10 @@ public class EventDetailVenueFragment extends Fragment {
     }
     
     public void initFragment() {
+        noteCardMissing = 0;
         queue = Volley.newRequestQueue(requireContext());
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
+        mapFragment.getMapAsync(this);
     }
 
     public void setupView(JSONObject venueObject) {
@@ -135,6 +149,7 @@ public class EventDetailVenueFragment extends Fragment {
             }
             else {
                 view.findViewById(R.id.event_venue_open_hours).setVisibility(View.GONE);
+                noteCardMissing++;
             }
             if (venueObject.has("generalInfo") && venueObject.getJSONObject("generalInfo").has("generalRule")) {
                 TextView venueGeneralRule = view.findViewById(R.id.event_venue_general_rules_text);
@@ -153,6 +168,7 @@ public class EventDetailVenueFragment extends Fragment {
             }
             else {
                 view.findViewById(R.id.event_venue_general_rules).setVisibility(View.GONE);
+                noteCardMissing++;
             }
             if (venueObject.has("generalInfo") && venueObject.getJSONObject("generalInfo").has("childRule")) {
                 TextView venueChildRule = view.findViewById(R.id.event_venue_child_rules_text);
@@ -171,6 +187,14 @@ public class EventDetailVenueFragment extends Fragment {
             }
             else {
                 view.findViewById(R.id.event_venue_child_rules).setVisibility(View.GONE);
+                noteCardMissing++;
+            }
+            if (venueObject.has("location") && venueObject.getJSONObject("location").has("latitude") && venueObject.getJSONObject("location").has("longitude")) {
+                venueLatLng = new LatLng(venueObject.getJSONObject("location").getDouble("latitude"), venueObject.getJSONObject("location").getDouble("longitude"));
+                updateMap();
+            }
+            if (noteCardMissing == 3) {
+                view.findViewById(R.id.event_venue_note_card).setVisibility(View.GONE);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -194,4 +218,21 @@ public class EventDetailVenueFragment extends Fragment {
         queue.add(jsonObjectRequest);
     }
 
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        this.googleMap = googleMap;
+    }
+
+    public void updateMap() {
+        if (venueLatLng != null) {
+            this.googleMap.addMarker(new MarkerOptions()
+                    .position(venueLatLng)
+                    .title(this.bundle.getString("venueName")));
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(venueLatLng) // set the center of the map
+                    .zoom(15) // set the zoom level
+                    .build();
+            this.googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+    }
 }

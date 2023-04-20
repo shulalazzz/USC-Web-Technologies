@@ -160,10 +160,19 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="240dp"
                 android:layout_marginTop="20dp"
                 app:cardCornerRadius="30dp">
 
+
+                <fragment
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/google_map"
+                    xmlns:map="http://schemas.android.com/apk/res-auto"
+                    map:uiZoomControls="true"
+                    map:uiRotateGestures="true"
+                    android:name="com.google.android.gms.maps.SupportMapFragment" />
 
             </androidx.cardview.widget.CardView>
 
@@ -178,6 +187,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         app:cardCornerRadius="30dp"
+        android:id="@+id/event_venue_note_card"
         app:cardBackgroundColor="@color/note_yellow">
 
         <LinearLayout
