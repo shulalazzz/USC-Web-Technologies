@@ -49,13 +49,19 @@
 
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="30dp"
-        android:id="@+id/event_artist_recycler_view">
+        android:layout_marginBottom="30dp">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp"
+            android:id="@+id/event_artist_recycler_view">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </ScrollView>
 
 
 

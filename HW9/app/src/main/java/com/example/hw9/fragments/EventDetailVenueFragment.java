@@ -194,7 +194,7 @@ public class EventDetailVenueFragment extends Fragment implements OnMapReadyCall
                 updateMap();
             }
             if (noteCardMissing == 3) {
-                view.findViewById(R.id.event_venue_note_card).setVisibility(View.GONE);
+                view.findViewById(R.id.event_venue_no_more_info).setVisibility(View.VISIBLE);
             }
         } catch (JSONException e) {
             e.printStackTrace();

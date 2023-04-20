@@ -44,5 +44,6 @@
     <string name="open_hours">Open Hours</string>
     <string name="child_rules">Child Rules</string>
     <string name="general_rules">General Rules</string>
+    <string name="no_more_information">No more Information</string>
 
 </resources>
