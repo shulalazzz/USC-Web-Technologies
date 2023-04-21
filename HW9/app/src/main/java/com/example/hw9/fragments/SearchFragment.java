@@ -232,7 +232,7 @@ public class SearchFragment extends Fragment {
                             sendAutoCompleteAndUpdateAdapter(autoCompleteUrl);
                         }
                     };
-                    autocompleteDelayHandler.postDelayed(runnable, 500);
+                    autocompleteDelayHandler.postDelayed(runnable, 300);
                 }
             }
 
