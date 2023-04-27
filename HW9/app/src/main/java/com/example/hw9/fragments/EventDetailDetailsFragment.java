@@ -60,20 +60,27 @@ public class EventDetailDetailsFragment extends Fragment {
             if (this.bundle.containsKey("status")) {
                 String status = this.bundle.getString("status");
                 TextView statusText = view.findViewById(R.id.event_detail_ticket_status_text);
-                statusText.setText(status);
                 CardView statusCard = view.findViewById(R.id.event_detail_ticket_status_card);
                 switch (status) {
                     case "onsale":
                         statusCard.setCardBackgroundColor(getResources().getColor(R.color.text_green));
+                        statusText.setText("On Sale");
                         break;
                     case "offsale":
                         statusCard.setCardBackgroundColor(getResources().getColor(R.color.red));
+                        statusText.setText("Off Sale");
                         break;
                     case "cancelled":
                         statusCard.setCardBackgroundColor(getResources().getColor(R.color.black));
+                        statusText.setText("Cancelled");
                         break;
-                    default:
+                    case "postponed":
                         statusCard.setCardBackgroundColor(getResources().getColor(R.color.orange));
+                        statusText.setText("Postponed");
+                        break;
+                    case "rescheduled":
+                        statusCard.setCardBackgroundColor(getResources().getColor(R.color.orange));
+                        statusText.setText("Rescheduled");
                         break;
                 }
 
