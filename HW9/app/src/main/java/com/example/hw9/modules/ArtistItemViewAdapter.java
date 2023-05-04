@@ -101,9 +101,13 @@ public class ArtistItemViewAdapter extends RecyclerView.Adapter<ArtistItemViewAd
 
         holder.popularityProgressBar.setProgress(Integer.parseInt(artistItems.get(position).getPopularity()));
         holder.popularityText.setText(artistItems.get(position).getPopularity());
-        Glide.with(context).load(artistItems.get(position).getAlbums().get(0)).into(holder.albumImageView1);
-        Glide.with(context).load(artistItems.get(position).getAlbums().get(1)).into(holder.albumImageView2);
-        Glide.with(context).load(artistItems.get(position).getAlbums().get(2)).into(holder.albumImageView3);
+        int albumSize = artistItems.get(position).getAlbums().size();
+        if (albumSize > 0)
+            Glide.with(context).load(artistItems.get(position).getAlbums().get(0)).into(holder.albumImageView1);
+        if (albumSize > 1)
+            Glide.with(context).load(artistItems.get(position).getAlbums().get(1)).into(holder.albumImageView2);
+        if (albumSize > 2)
+            Glide.with(context).load(artistItems.get(position).getAlbums().get(2)).into(holder.albumImageView3);
     }
 
     @Override
