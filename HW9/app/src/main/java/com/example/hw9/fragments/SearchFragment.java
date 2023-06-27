@@ -52,7 +52,7 @@ public class SearchFragment extends Fragment {
     private AutoCompleteTextView locationInput;
     private ProgressBar autoCompleteProgressBar;
     private final String backendAutoCompleteUrl = "https://csci-571-hw8-382201.wl.r.appspot.com/autocomplete/";
-    private final String ipInfoApi = "https://ipinfo.io/json?token=fcee7187512c64";
+    private final String ipInfoApi = "https://ipinfo.io/json?token=";
     private RequestQueue queue;
     View view;
     // The array that contains the suggestions
@@ -119,7 +119,7 @@ public class SearchFragment extends Fragment {
                         queue.add(stringRequest);
                     } else {
                         location = location.trim().replaceAll("\\s+", "+");
-                        String googleMapUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location + "&key=AIzaSyAhrUOOniYwPz_aLnuKi2M6v3DfG50oH5o";
+                        String googleMapUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location + "&key=";
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, googleMapUrl, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {

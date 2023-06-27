@@ -6,12 +6,12 @@ import requests
 app = Flask(__name__, static_url_path='')
 
 # Ipinfo API
-# fcee7187512c64
+#
 # Google Maps API
-# AIzaSyAhrUOOniYwPz_aLnuKi2M6v3DfG50oH5o
+#
 # tickermasterapi
-# Consumer Key	pviXh7vSvsPRcVqdsl6D1b1deOhtRKcb
-# Consumer Secret	VAQWgL5UV5oiIaoV
+# Consumer Key
+# Consumer Secret
 
 categoryMap = {'Music': 'KZFzniwnSyZfZ7v7nJ', 'Sports': 'KZFzniwnSyZfZ7v7nE', 'Arts': 'KZFzniwnSyZfZ7v7na',
                'Film': 'KZFzniwnSyZfZ7v7nn', 'Miscellaneous': 'KZFzniwnSyZfZ7v7n1', 'Default': ''}
@@ -26,7 +26,7 @@ def index():
 def search(data):
     jsonData = json.loads(data)
     print(jsonData)
-    apikey = 'pviXh7vSvsPRcVqdsl6D1b1deOhtRKcb'
+    apikey = ''
     lat, lng = jsonData['location'].split(',')
     geoPoint = geohash.encode(float(lat), float(lng), precision=7)
     radius = (jsonData['distance'])
@@ -47,7 +47,7 @@ def search(data):
 
 @app.route('/event/<event_id>', methods=['GET'])
 def get_event_detail(event_id):
-    apikey = 'pviXh7vSvsPRcVqdsl6D1b1deOhtRKcb'
+    apikey = ''
     response = requests.get('https://app.ticketmaster.com/discovery/v2/events/' + event_id,
                             params={'apikey': apikey})
     if response.status_code == 200:
@@ -62,7 +62,7 @@ def get_event_detail(event_id):
 @app.route('/venue/<venue_name>', methods=['GET'])
 def get_venue_detail(venue_name):
     print(venue_name)
-    apikey = 'pviXh7vSvsPRcVqdsl6D1b1deOhtRKcb'
+    apikey = ''
     response = requests.get('https://app.ticketmaster.com/discovery/v2/venues',
                             params={'apikey': apikey, 'keyword': venue_name})
     if response.status_code == 200:

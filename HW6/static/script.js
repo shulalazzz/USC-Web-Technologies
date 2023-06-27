@@ -5,9 +5,9 @@ window.onload = function () {
 }
 
 // Ipinfo API
-// fcee7187512c64
+//
 // Google Maps API
-// AIzaSyAhrUOOniYwPz_aLnuKi2M6v3DfG50oH5o
+//
 function clearForm() {
     resetResult()
     document.getElementById('main-form').reset()
@@ -49,7 +49,7 @@ function search() {
             return false
         }
         location = location.split(' ').join('+')
-        fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyAhrUOOniYwPz_aLnuKi2M6v3DfG50oH5o`).
+        fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=`).
         then(response => response.json()).then(data => {
             // location = data.results[0].geometry.location.lat + ',' + data.results[0].geometry.location.lng
             if (data['status'] === 'ZERO_RESULTS') {
@@ -64,7 +64,7 @@ function search() {
 
     }
     else {
-        fetch("https://ipinfo.io/json?token=fcee7187512c64").then(response => response.json()).then(data => {
+        fetch("https://ipinfo.io/json?token=").then(response => response.json()).then(data => {
             location = data['loc']
             // console.log(data)
             sendToPythonSearch(keyword, location, distance, category)

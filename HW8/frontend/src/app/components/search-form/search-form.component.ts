@@ -31,7 +31,7 @@ export class SearchFormComponent implements OnInit{
   backendAutoCompleteUrl: string = 'https://csci-571-hw8-382201.wl.r.appspot.com/autocomplete/';
   // https://csci-571-hw8-382201.wl.r.appspot.com/search
 
-  private ipInfoApi: string = "https://ipinfo.io/json?token=fcee7187512c64";
+  private ipInfoApi: string = "https://ipinfo.io/json?token=";
 
 
   constructor(private http: HttpClient, private resultsTableDataService: ResultsTableDataService) {
@@ -105,7 +105,7 @@ export class SearchFormComponent implements OnInit{
       }
       else if (this.myForm.controls['locationCheckbox'].value === false) {
         let location :string = this.myForm.controls['locationText'].value.split(' ').join('+');
-        this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyAhrUOOniYwPz_aLnuKi2M6v3DfG50oH5o`).subscribe(response => {
+        this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=`).subscribe(response => {
           // console.log(response);
           if (response.status === "ZERO_RESULTS") {
             console.log("Invalid location");

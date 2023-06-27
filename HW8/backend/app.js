@@ -8,14 +8,14 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-const apikey = 'pviXh7vSvsPRcVqdsl6D1b1deOhtRKcb';
+const apikey = '';
 
 const categoryMap = {'Music': 'KZFzniwnSyZfZ7v7nJ', 'Sports': 'KZFzniwnSyZfZ7v7nE', 'Arts': 'KZFzniwnSyZfZ7v7na',
     'Film': 'KZFzniwnSyZfZ7v7nn', 'Miscellaneous': 'KZFzniwnSyZfZ7v7n1', 'Default': ''};
 
 const spotifyApi = new SpotifyWebApi({
-    clientId: '18b00b32220347659ee24add2e2029aa',
-    clientSecret: 'c083a247e7a14bab9df99084f18f12ad',
+    clientId: '',
+    clientSecret: '',
 });
 
 let accessToken = '';
